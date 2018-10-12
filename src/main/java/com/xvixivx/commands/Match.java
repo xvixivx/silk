@@ -256,7 +256,7 @@ public class Match extends ListenerAdapter {
     {
         builder.setTitle("**Command Information**");
         builder.setColor(Color.RED);
-        builder.addField("usage", "-s match (region) (platform) (game-type) (room-id)", false);
+        builder.addField("usage", "-s match (region) (platform) (game-type) (room-id) (note: optional)", false);
         builder.addField("example", "-s match eu mobile tournament 8E3RC", false);
         builder.addField("region", "as = asia, eu = european union, na = north america, sa = south america", false);
         builder.addField("platform", "pc or mobile", false);
