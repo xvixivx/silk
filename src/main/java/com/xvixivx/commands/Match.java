@@ -4,6 +4,7 @@ import com.xvixivx.dao.GuildDAO;
 import com.xvixivx.dto.GuildDTO;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -36,9 +37,14 @@ public class Match extends ListenerAdapter {
         }
 
         Guild guild = event.getGuild();
-        MessageChannel channel = event.getChannel();
+        TextChannel channel = event.getTextChannel();
 
         if (!Content.hasCommand(contents))
+        {
+            return;
+        }
+        // Check permission
+        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE))
         {
             return;
         }
@@ -229,7 +235,7 @@ public class Match extends ListenerAdapter {
                     continue;
                 }
 
-                Channel targetChannel = target.getTextChannelById(textChannelId);
+                TextChannel targetChannel = target.getTextChannelById(textChannelId);
 
                 if (Objects.isNull(targetChannel)) {
                     continue;
@@ -246,7 +252,7 @@ public class Match extends ListenerAdapter {
                 builder.addField("Room ID", roomId, false);
                 builder.setFooter("Created by " + event.getMember().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
 
-                ((TextChannel) targetChannel).sendMessage(builder.build()).queue();
+                targetChannel.sendMessage(builder.build()).queue();
 
                 if (guild.getId().equals(target.getId()) && !channel.getId().equals(targetChannel.getId()))
                 {
@@ -272,7 +278,7 @@ public class Match extends ListenerAdapter {
         return exists;
     }
 
-    private void commandInfo(MessageChannel channel, EmbedBuilder builder)
+    private void commandInfo(TextChannel channel, EmbedBuilder builder)
     {
         builder.setTitle("**Command Information**");
         builder.setColor(Color.RED);

@@ -8,7 +8,7 @@ mainClassName = 'com.xvixivx.Silk'
 
 group 'com.xvixivx'
 version '1.0-SNAPSHOT'
-def jdaVersion = '3.8.0_427'
+def jdaVersion = '3.8.0_436'
 
 sourceCompatibility = 1.8
 

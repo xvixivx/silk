@@ -2,9 +2,11 @@ package com.xvixivx.commands;
 
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -33,9 +35,15 @@ public class Help extends ListenerAdapter {
             return;
         }
 
-        MessageChannel channel = event.getChannel();
+        Guild guild = event.getGuild();
+        TextChannel channel = event.getTextChannel();
 
         if (!Content.hasCommand(contents))
+        {
+            return;
+        }
+        // Check permission
+        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE))
         {
             return;
         }

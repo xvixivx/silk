@@ -3,6 +3,7 @@ package com.xvixivx.commands;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -35,9 +36,14 @@ public class GuildInfo extends ListenerAdapter {
         }
 
         Guild guild = event.getGuild();
-        MessageChannel channel = event.getChannel();
+        TextChannel channel = event.getTextChannel();
 
         if (!Content.hasCommand(contents))
+        {
+            return;
+        }
+        // Check permission
+        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE))
         {
             return;
         }

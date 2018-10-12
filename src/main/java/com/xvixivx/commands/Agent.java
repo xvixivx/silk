@@ -4,9 +4,11 @@ import com.xvixivx.dto.AgentDTO;
 import com.xvixivx.dao.AgentDAO;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -36,9 +38,15 @@ public class Agent extends ListenerAdapter {
             return;
         }
 
-        MessageChannel channel = event.getChannel();
+        Guild guild = event.getGuild();
+        TextChannel channel = event.getTextChannel();
 
         if (!Content.hasCommand(contents))
+        {
+            return;
+        }
+        // Check permission
+        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE))
         {
             return;
         }
@@ -95,7 +103,7 @@ public class Agent extends ListenerAdapter {
         }
     }
 
-    private void commandInfo(MessageChannel channel, EmbedBuilder builder)
+    private void commandInfo(TextChannel channel, EmbedBuilder builder)
     {
         builder.setTitle("**Command Information**");
         builder.setColor(Color.RED);
