@@ -215,19 +215,35 @@ public class Match extends ListenerAdapter {
             List<Guild> guilds = guild.getJDA().getGuilds();
 
             for (Guild target : guilds) {
-//                System.out.println(target.getName());
+                // TODO: Delete this system.out.prinln
+                System.out.println("target: " + target.getName());
                 guildData = guildDAO.find(target.getId());
+                // TODO: Delete this system.out.prinln
+                System.out.println("guildData: " + guildData.getName());
                 textChannelId = guildData.getMatchChannelId();
                 if (Objects.isNull(guildData) || Objects.isNull(textChannelId)) {
+                    // TODO: Delete this system.out.prinln
+                    System.out.println("1st: guildName: " + guildData.getName() + " channelId: " + textChannelId);
                     continue;
                 }
 
                 TextChannel targetChannel = target.getTextChannelById(textChannelId);
 
                 if (Objects.isNull(targetChannel)) {
+                    // TODO: Delete this system.out.prinln
+                    System.out.println("2nd: guildName: " + guildData.getName()
+                            + " targetChannelID: " + targetChannel.getId());
                     continue;
                 }
                 if (!guildData.isReceiveMatch() && !guild.getId().equals(target.getId()))
+                {
+                    // TODO: Delete this system.out.prinln
+                    System.out.println("3rd: " + String.valueOf(guildData.isReceiveMatch())
+                            + " guildID: " + guild.getId() + " targetID: " + target.getId());
+                    continue;
+                }
+                // Check permission
+                if (!target.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_WRITE))
                 {
                     continue;
                 }
