@@ -2,6 +2,7 @@ package com.xvixivx.commands;
 
 import com.xvixivx.dao.GuildDAO;
 import com.xvixivx.dto.GuildDTO;
+import com.xvixivx.dto.MatchDTO;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -21,7 +22,7 @@ public class Match extends ListenerAdapter {
         if (event.getAuthor().isBot()) return;
         // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
-        String[] contents = message.getContentRaw().split(" ");
+        String[] contents = message.getContentRaw().split(" ", 7);
         // getContentRaw() is an atomic getter
         // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
 
@@ -185,41 +186,27 @@ public class Match extends ListenerAdapter {
             }
 
             // Minimum Arguments set of an example for the match is "-s match as mobile group 6EECB"
-            int minimumArgumentsNumberForMatch = 6;
+            int minimumArgumentsNumber = 6;
+            int maximumArgumentsNumber = 7;
 
-            if (contents.length != minimumArgumentsNumberForMatch)
+            if (contents.length < minimumArgumentsNumber || contents.length > maximumArgumentsNumber)
             {
                 commandInfo(channel, builder);
                 return;
             }
 
-            String[] regions = {"as", "eu", "na", "sa"};
-            String[] platforms = {"mobile", "pc"};
-            String[] gameTypes = {"group", "tournament"};
+            MatchDTO match = new MatchDTO();
+            match.setRegion(contents[2]);
+            match.setPlatform(contents[3]);
+            match.setGameType(contents[4]);
+            match.setRoomId(contents[5]);
 
-            String region;
-            String platform;
-            String gameType;
-            String roomId;
-
-            if (Content.isRightSize(contents, 10) && Content.isMatchTheRegex(contents))
+            if (contents.length == maximumArgumentsNumber)
             {
-                region = contents[2];
-                platform = contents[3];
-                gameType = contents[4];
-                roomId = contents[5];
-            }
-            else
-            {
-                commandInfo(channel, builder);
-                return;
+                match.setNote(contents[6]);
             }
 
-            boolean isRightRegion = checkInput(region, regions);
-            boolean isRightPlatform = checkInput(platform, platforms);
-            boolean isRightGameTypes = checkInput(gameType, gameTypes);
-
-            if (!isRightRegion || !isRightPlatform || !isRightGameTypes)
+            if (!match.isReady())
             {
                 commandInfo(channel, builder);
                 return;
@@ -246,10 +233,11 @@ public class Match extends ListenerAdapter {
                 }
                 builder.setTitle("**Match**");
                 builder.setColor(Color.CYAN);
-                builder.addField("Server", region, false);
-                builder.addField("Platform", platform, false);
-                builder.addField("Game Type", gameType, false);
-                builder.addField("Room ID", roomId, false);
+                builder.addField("Server", match.getRegion(), false);
+                builder.addField("Platform", match.getPlatform(), false);
+                builder.addField("Game Type", match.getGameType(), false);
+                builder.addField("Room ID", match.getRoomId(), false);
+                builder.addField("Note", match.getNote(), false);
                 builder.setFooter("Created by " + event.getMember().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
 
                 targetChannel.sendMessage(builder.build()).queue();
@@ -262,20 +250,6 @@ public class Match extends ListenerAdapter {
                 builder.clear();
             }
         }
-    }
-
-    private boolean checkInput(String input, String[] comparisons)
-    {
-        boolean exists = false;
-
-        for (String comparison : comparisons)
-        {
-            if (input.equalsIgnoreCase(comparison))
-            {
-                exists =  true;
-            }
-        }
-        return exists;
     }
 
     private void commandInfo(TextChannel channel, EmbedBuilder builder)

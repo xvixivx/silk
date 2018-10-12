@@ -1,5 +1,7 @@
 package com.xvixivx.util;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Content {
 
     public static boolean isRightPrefix(String content)
@@ -96,5 +98,19 @@ public class Content {
         }
 
         return result;
+    }
+
+    public static boolean isMatch(String content, @NotNull String[] comparisons)
+    {
+        boolean result = false;
+
+        for (String comparison : comparisons)
+        {
+            if (comparison.equalsIgnoreCase(content))
+            {
+                result = true;
+            }
+        }
+        return  result;
     }
 }
