@@ -263,6 +263,12 @@ public class Match extends ListenerAdapter {
                 if (guild.getId().equals(target.getId()) && !channel.getId().equals(targetChannel.getId()))
                 {
                     channel.sendMessage(builder.build()).queue();
+                    logger.debug("Region: " + match.getRegion());
+                    logger.debug("Platform: " + match.getPlatform());
+                    logger.debug("Game Type: " + match.getGameType());
+                    logger.debug("Room Id: " + match.getRoomId());
+                    logger.debug("Note: " + match.getNote());
+                    logger.debug("Created by: " + event.getMember().getEffectiveName());
                 }
 
                 builder.clear();
