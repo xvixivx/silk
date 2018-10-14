@@ -9,12 +9,16 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
 public class Match extends ListenerAdapter {
+
+    final Logger logger = LoggerFactory.getLogger(Match.class);
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
@@ -214,37 +218,35 @@ public class Match extends ListenerAdapter {
 
             List<Guild> guilds = guild.getJDA().getGuilds();
 
-            for (Guild target : guilds) {
-                // TODO: Delete this system.out.prinln
-                System.out.println("target: " + target.getName());
+            for (Guild target : guilds)
+            {
                 guildData = guildDAO.find(target.getId());
-                // TODO: Delete this system.out.prinln
-                System.out.println("guildData: " + guildData.getName());
                 textChannelId = guildData.getMatchChannelId();
-                if (Objects.isNull(guildData) || Objects.isNull(textChannelId)) {
-                    // TODO: Delete this system.out.prinln
-                    System.out.println("1st: guildName: " + guildData.getName() + " channelId: " + textChannelId);
+                if (Objects.isNull(guildData) || Objects.isNull(textChannelId))
+                {
+                    logger.debug("Cannot get data");
+                    logger.debug("GuildName: " + target.getName());
                     continue;
                 }
 
                 TextChannel targetChannel = target.getTextChannelById(textChannelId);
 
-                if (Objects.isNull(targetChannel)) {
-                    // TODO: Delete this system.out.prinln
-                    System.out.println("2nd: guildName: " + guildData.getName()
-                            + " targetChannelID: " + targetChannel.getId());
+                if (Objects.isNull(targetChannel))
+                {
+                    logger.debug("Channel is not exists");
+                    logger.debug("GuildName: " + target.getName());
                     continue;
                 }
                 if (!guildData.isReceiveMatch() && !guild.getId().equals(target.getId()))
                 {
-                    // TODO: Delete this system.out.prinln
-                    System.out.println("3rd: " + String.valueOf(guildData.isReceiveMatch())
-                            + " guildID: " + guild.getId() + " targetID: " + target.getId());
                     continue;
                 }
                 // Check permission
                 if (!target.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_WRITE))
                 {
+                    logger.debug("Permission.MESSAGE_WRITE Required");
+                    logger.debug("GuildName: " + target.getName());
+                    logger.debug("Channel: " + targetChannel.getName());
                     continue;
                 }
                 builder.setTitle("**Match**");
