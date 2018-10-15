@@ -58,6 +58,7 @@ public class Help extends ListenerAdapter {
             builder.addField("bot", "bot info ", false);
             builder.addField("guild", "guild info ", false);
             builder.addField("match", "send match info to the other guilds", false);
+            builder.addField("match set help", "help of a matchmaking channel settings", false);
             builder.addField("invite", "make the invitation link", false);
             channel.sendMessage(builder.build()).queue();
         }

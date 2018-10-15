@@ -19,7 +19,7 @@ public class GuildDAO {
     private String userName = "";
     private String passWord = "";
 
-    Logger logger = LoggerFactory.getLogger(GuildDAO.class);
+    final Logger logger = LoggerFactory.getLogger(GuildDAO.class);
 
     private void initialize()
     {
@@ -60,9 +60,7 @@ public class GuildDAO {
             connection = DriverManager.getConnection(url, userName, passWord);
             String sql = "SELECT "
                     + "name, "
-                    + "region, "
-                    + "match_channel_id, "
-                    + "receive_match "
+                    + "region "
                     + "FROM guilds WHERE id = ? ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, guildId);
@@ -71,10 +69,8 @@ public class GuildDAO {
             if (rs.next()) {
                 String name = rs.getString("name");
                 String region = rs.getString("region");
-                String matchChannelId = rs.getString("match_channel_id");
-                boolean receiveMatch = rs.getBoolean("receive_match");
 
-                guild = new GuildDTO(name, region, matchChannelId, receiveMatch);
+                guild = new GuildDTO(name, region);
             }
         }
         catch (SQLException e)
@@ -110,7 +106,7 @@ public class GuildDAO {
         return guild;
     }
 
-    public int upsertAll(long id, String name, String region, long matchChannelId, boolean receiveMatch)
+    public int upsertAll(long id, String name, String region)
     {
         int result = 0;
 
@@ -120,23 +116,19 @@ public class GuildDAO {
             connection = DriverManager.getConnection(url, userName, passWord);
             connection.setAutoCommit(false);
             String sql = "INSERT INTO guilds "
-                    + "(id, name, region, match_channel_id, receive_match) "
-                    + "VALUES(?, ?, ?, ?, ?) "
+                    + "(id, name, region) "
+                    + "VALUES(?, ?, ?) "
                     + "ON DUPLICATE KEY "
                     + "UPDATE "
-                    + "id = ?, name = ?, region = ?, match_channel_id = ?, receive_match = ? ";
+                    + "id = ?, name = ?, region = ? ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, id);
             pstmt.setString(2, name);
             pstmt.setString(3, region);
-            pstmt.setLong(4, matchChannelId);
-            pstmt.setBoolean(5, receiveMatch);
-            pstmt.setLong(6, id);
-            pstmt.setString(7, name);
-            pstmt.setString(8, region);
-            pstmt.setLong(9, matchChannelId);
-            pstmt.setBoolean(10, receiveMatch);
-//            System.out.println(pstmt.toString());
+            pstmt.setLong(4, id);
+            pstmt.setString(5, name);
+            pstmt.setString(6, region);
+            logger.debug(pstmt.toString());
 
             result = pstmt.executeUpdate();
             connection.commit();
@@ -180,7 +172,7 @@ public class GuildDAO {
         return result;
     }
 
-    public int updateReceiveMatch(long id, boolean receiveMatch)
+    public int delete(long id)
     {
         int result = 0;
 
@@ -189,12 +181,10 @@ public class GuildDAO {
         {
             connection = DriverManager.getConnection(url, userName, passWord);
             connection.setAutoCommit(false);
-            String sql = "UPDATE guilds "
-                    + "SET receive_match = ? "
+            String sql = "DELETE FROM guilds "
                     + "WHERE id = ? ";
             pstmt = connection.prepareStatement(sql);
-            pstmt.setBoolean(1, receiveMatch);
-            pstmt.setLong(2, id);
+            pstmt.setLong(1, id);
 
             result = pstmt.executeUpdate();
             connection.commit();

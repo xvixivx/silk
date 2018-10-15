@@ -1,12 +1,21 @@
 package com.xvixivx.commands;
 
 import com.xvixivx.dao.GuildDAO;
+import com.xvixivx.dao.MatchChannelDAO;
 import com.xvixivx.dto.GuildDTO;
+import com.xvixivx.dto.MatchChannelDTO;
 import com.xvixivx.dto.MatchDTO;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.core.events.channel.text.update.TextChannelUpdateNameEvent;
+import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.core.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.core.events.guild.update.GuildUpdateRegionEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -19,6 +28,80 @@ import java.util.Objects;
 public class Match extends ListenerAdapter {
 
     final Logger logger = LoggerFactory.getLogger(Match.class);
+
+    @Override
+    public void onReady(ReadyEvent event) {
+        List<Guild> guilds = event.getJDA().getGuilds();
+        for (Guild target : guilds)
+        {
+            int result = new GuildDAO().upsertAll(target.getIdLong(), target.getName(), target.getRegionRaw());
+            if (result == 0)
+            {
+                logger.error("Upsert Error at onReady(ReadyEvent event)");
+            }
+        }
+    }
+
+    @Override
+    public void onGuildJoin(GuildJoinEvent event) {
+        Guild guild = event.getGuild();
+        int result = new GuildDAO().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
+        if (result == 0)
+        {
+            logger.error("Upsert Error at onGuildJoin(GuildJoinEvent event)");
+        }
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent event) {
+        Guild guild = event.getGuild();
+        int result = new GuildDAO().delete(guild.getIdLong());
+        if (result == 0)
+        {
+            logger.error("Delete Error at onGuildLeave(GuildLeaveEvent event)");
+        }
+    }
+
+    @Override
+    public void onGuildUpdateName(GuildUpdateNameEvent event) {
+        Guild guild = event.getGuild();
+        int result = new GuildDAO().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
+        if (result == 0)
+        {
+            logger.error("Upsert Error at onGuildUpdateName(GuildUpdateNameEvent event)");
+        }
+    }
+
+    @Override
+    public void onGuildUpdateRegion(GuildUpdateRegionEvent event) {
+        Guild guild = event.getGuild();
+        int result = new GuildDAO().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
+        if (result == 0)
+        {
+            logger.error("Upsert Error at onGuildUpdateName(GuildUpdateNameEvent event)");
+        }
+    }
+
+    @Override
+    public void onTextChannelDelete(TextChannelDeleteEvent event) {
+        Guild guild = event.getGuild();
+        int result = new MatchChannelDAO().delete(guild.getIdLong(), event.getChannel().getIdLong());
+        if (result == 0)
+        {
+            logger.error("Delete Error at onTextChannelDelete(TextChannelDeleteEvent event)");
+        }
+    }
+
+    @Override
+    public void onTextChannelUpdateName(TextChannelUpdateNameEvent event) {
+        Guild guild = event.getGuild();
+        TextChannel channel = event.getChannel();
+        int result = new MatchChannelDAO().updateChannelName(guild.getIdLong(), channel.getIdLong(), channel.getName());
+        if (result == 0)
+        {
+            logger.error("Update Error at onTextChannelUpdateName(TextChannelUpdateNameEvent event)");
+        }
+    }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
@@ -60,8 +143,8 @@ public class Match extends ListenerAdapter {
             EmbedBuilder builder = new EmbedBuilder();
             GuildDAO guildDAO = new GuildDAO();
             GuildDTO guildData = guildDAO.find(guild.getId());
-            String textChannelId = guildData.getMatchChannelId();
-            Channel textChannel = null;
+            MatchChannelDAO matchChannelDAO = new MatchChannelDAO();
+            MatchChannelDTO matchChannel;
 
             // Minimum Arguments set of an example for the set is "-s match set"
             int minimumArgumentsNumberForSet = 3;
@@ -81,13 +164,54 @@ public class Match extends ListenerAdapter {
                     builder.setColor(Color.RED);
                     builder.setDescription("Permission Required");
                 }
-                boolean receiveMatch = true;
-                int result = guildDAO.upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw(), channel.getIdLong(), receiveMatch);
+                int maxArguments = 6;
+                if (contents.length > maxArguments)
+                {
+                    builder.setTitle("**Error**");
+                    builder.setColor(Color.RED);
+                    builder.setDescription("Too many Arguments");
+                    channel.sendMessage(builder.build()).queue();
+                    builder.clear();
+                    return;
+                }
+//              -s match set help <= command length is 4
+                if (contents.length == 4 && contents[3].equalsIgnoreCase("help"))
+                {
+                    builder.setTitle("**Command Info**");
+                    builder.setColor(Color.RED);
+                    builder.setDescription("Multiple channels can receive the matchmaking info");
+                    builder.addField("Set All Attribute", "`-s match set (region :optional) (platform :optional) (game-type :optional)`", false);
+                    builder.addField("Example", "`-s match set eu mobile tournament`", false);
+                    builder.addField("Set Region And Platform", "`-s match set (region) (platform)`", false);
+                    builder.addField("Example", "`-s match set as pc`", false);
+                    builder.addField("Set Platform And Game Type", "`-s match set (platform) (game-type)`", false);
+                    builder.addField("Example", "`-s match set na group`", false);
+                    builder.addField("No Filter", "`-s match set`", false);
+                    channel.sendMessage(builder.build()).queue();
+                    builder.clear();
+                    return;
+                }
+
+                boolean receive = true;
+                MatchDTO match = new MatchDTO();
+                if (contents.length > 3)
+                {
+                    for (int i = 3; i < contents.length; i++)
+                    {
+                        match.setRegion(contents[i]);
+                        match.setPlatform(contents[i]);
+                        match.setGameType(contents[i]);
+                    }
+                }
+                int result = matchChannelDAO.upsertAll(guild.getIdLong(), channel.getIdLong(), channel.getName(), match.getRegion(), match.getPlatform(), match.getGameType(), receive);
                 if (result != 0)
                 {
                     builder.setTitle("**Set Channel**");
                     builder.setColor(Color.CYAN);
                     builder.setDescription("Success!");
+                    builder.addField("Region", Objects.toString(match.getRegion(), ""), false);
+                    builder.addField("Platform", Objects.toString(match.getPlatform(), ""), false);
+                    builder.addField("GameType", Objects.toString(match.getGameType(), ""), false);
                     channel.sendMessage(builder.build()).queue();
                 }
                 else
@@ -110,14 +234,14 @@ public class Match extends ListenerAdapter {
                     builder.setColor(Color.RED);
                     builder.setDescription("Permission Required");
                 }
-                boolean receiveMatch = true;
+                boolean receive = true;
                 int result = 0;
 
-                guildData = guildDAO.find(guild.getId());
+                matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
 
-                if (Objects.nonNull(guildData))
+                if (Objects.nonNull(matchChannel))
                 {
-                    result = guildDAO.updateReceiveMatch(guild.getIdLong(), receiveMatch);
+                    result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
                 }
 
                 if (result != 0)
@@ -147,14 +271,14 @@ public class Match extends ListenerAdapter {
                     builder.setColor(Color.RED);
                     builder.setDescription("Permission Required");
                 }
-                boolean receiveMatch = false;
+                boolean receive = false;
                 int result = 0;
 
-                guildData = guildDAO.find(guild.getId());
+                matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
 
-                if (Objects.nonNull(guildData))
+                if (Objects.nonNull(matchChannel))
                 {
-                    result = guildDAO.updateReceiveMatch(guild.getIdLong(), receiveMatch);
+                    result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
                 }
 
                 if (result != 0)
@@ -175,10 +299,9 @@ public class Match extends ListenerAdapter {
                 return;
             }
 
-            if (!Objects.isNull(textChannelId)) {
-                textChannel = guild.getTextChannelById(textChannelId);
-            }
-            if (Objects.isNull(textChannelId) || Objects.isNull(textChannel))
+            matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
+
+            if (Objects.isNull(matchChannel))
             {
                 builder.setTitle("**Error**");
                 builder.setColor(Color.RED);
@@ -217,36 +340,49 @@ public class Match extends ListenerAdapter {
             }
 
             List<Guild> guilds = guild.getJDA().getGuilds();
+            List<MatchChannelDTO> matchChannels;
+            matchChannels = matchChannelDAO.findChannels(match.getRegion(), match.getPlatform(), match.getGameType());
 
-            for (Guild target : guilds)
+            if (matchChannels.size() == 0)
             {
-                guildData = guildDAO.find(target.getId());
-                textChannelId = guildData.getMatchChannelId();
-                if (Objects.isNull(guildData) || Objects.isNull(textChannelId))
+                builder.setTitle("**Match**");
+                builder.setColor(Color.CYAN);
+                builder.addField("Server", match.getRegion(), false);
+                builder.addField("Platform", match.getPlatform(), false);
+                builder.addField("Game Type", match.getGameType(), false);
+                builder.addField("Room ID", match.getRoomId(), false);
+                builder.addField("Note", match.getNote(), false);
+                builder.addField("From ", guild.getName(), false);
+                builder.setFooter("Created by " + event.getMember().getEffectiveName(),
+                        event.getAuthor().getEffectiveAvatarUrl());
+                channel.sendMessage(builder.build()).queue();
+                builder.clear();
+                return;
+            }
+
+            for (MatchChannelDTO target : matchChannels)
+            {
+                Guild targetGuild = event.getJDA().getGuildById(target.getGuildId());
+                if (!guilds.contains(targetGuild))
                 {
-                    logger.debug("Cannot get data");
-                    logger.debug("GuildName: " + target.getName());
+                    logger.debug("Guild is not exists");
+                    logger.debug("Guild: " + target.getGuildName());
                     continue;
                 }
-
-                TextChannel targetChannel = target.getTextChannelById(textChannelId);
-
+                TextChannel targetChannel = targetGuild.getTextChannelById(target.getChannelId());
                 if (Objects.isNull(targetChannel))
                 {
                     logger.debug("Channel is not exists");
-                    logger.debug("GuildName: " + target.getName());
+                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Channel: " + target.getChannelName());
                     continue;
                 }
-                if (!guildData.isReceiveMatch() && !guild.getId().equals(target.getId()))
-                {
-                    continue;
-                }
-                // Check permission
-                if (!target.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_WRITE))
+                // Check Permission
+                if (!targetGuild.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_WRITE))
                 {
                     logger.debug("Permission.MESSAGE_WRITE Required");
-                    logger.debug("GuildName: " + target.getName());
-                    logger.debug("Channel: " + targetChannel.getName());
+                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Channel: " + target.getChannelName());
                     continue;
                 }
                 builder.setTitle("**Match**");
@@ -256,21 +392,23 @@ public class Match extends ListenerAdapter {
                 builder.addField("Game Type", match.getGameType(), false);
                 builder.addField("Room ID", match.getRoomId(), false);
                 builder.addField("Note", match.getNote(), false);
-                builder.setFooter("Created by " + event.getMember().getEffectiveName(), event.getAuthor().getEffectiveAvatarUrl());
-
+                builder.addField("From", guild.getName(), false);
+                builder.setFooter("Created by " + event.getMember().getEffectiveName(),
+                        event.getAuthor().getEffectiveAvatarUrl());
                 targetChannel.sendMessage(builder.build()).queue();
 
-                if (guild.getId().equals(target.getId()) && !channel.getId().equals(targetChannel.getId()))
+                if (guild.getIdLong() == targetGuild.getIdLong() && channel.getIdLong() != targetChannel.getIdLong())
                 {
                     channel.sendMessage(builder.build()).queue();
+                    logger.debug("Match Info");
+                    logger.debug("Guild: " + guild.getName());
+                    logger.debug("Creator: " + event.getMember().getEffectiveName());
                     logger.debug("Region: " + match.getRegion());
                     logger.debug("Platform: " + match.getPlatform());
                     logger.debug("Game Type: " + match.getGameType());
                     logger.debug("Room Id: " + match.getRoomId());
                     logger.debug("Note: " + match.getNote());
-                    logger.debug("Created by: " + event.getMember().getEffectiveName());
                 }
-
                 builder.clear();
             }
         }
