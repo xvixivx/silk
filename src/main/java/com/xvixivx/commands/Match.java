@@ -353,12 +353,15 @@ public class Match extends ListenerAdapter {
                 builder.addField("Room ID", match.getRoomId(), false);
                 builder.addField("Note", match.getNote(), false);
                 builder.addField("From ", guild.getName(), false);
+                builder.addField("test test", "test test", false);
                 builder.setFooter("Created by " + event.getMember().getEffectiveName(),
                         event.getAuthor().getEffectiveAvatarUrl());
                 channel.sendMessage(builder.build()).queue();
                 builder.clear();
                 return;
             }
+
+            boolean matchChannelTableHasThisChannel = false;
 
             for (MatchChannelDTO target : matchChannels)
             {
@@ -396,21 +399,37 @@ public class Match extends ListenerAdapter {
                 builder.setFooter("Created by " + event.getMember().getEffectiveName(),
                         event.getAuthor().getEffectiveAvatarUrl());
                 targetChannel.sendMessage(builder.build()).queue();
+                builder.clear();
 
-                if (guild.getIdLong() == targetGuild.getIdLong() && channel.getIdLong() != targetChannel.getIdLong())
+                if (guild.getIdLong() == targetGuild.getIdLong() && channel.getIdLong() == targetChannel.getIdLong())
                 {
-                    channel.sendMessage(builder.build()).queue();
-                    logger.debug("Match Info");
-                    logger.debug("Guild: " + guild.getName());
-                    logger.debug("Creator: " + event.getMember().getEffectiveName());
-                    logger.debug("Region: " + match.getRegion());
-                    logger.debug("Platform: " + match.getPlatform());
-                    logger.debug("Game Type: " + match.getGameType());
-                    logger.debug("Room Id: " + match.getRoomId());
-                    logger.debug("Note: " + match.getNote());
+                    matchChannelTableHasThisChannel = true;
                 }
+            }
+            if (!matchChannelTableHasThisChannel)
+            {
+                builder.setTitle("**Match**");
+                builder.setColor(Color.CYAN);
+                builder.addField("Server", match.getRegion(), false);
+                builder.addField("Platform", match.getPlatform(), false);
+                builder.addField("Game Type", match.getGameType(), false);
+                builder.addField("Room ID", match.getRoomId(), false);
+                builder.addField("Note", match.getNote(), false);
+                builder.addField("From", guild.getName(), false);
+                builder.setFooter("Created by " + event.getMember().getEffectiveName(),
+                        event.getAuthor().getEffectiveAvatarUrl());
+                channel.sendMessage(builder.build()).queue();
                 builder.clear();
             }
+
+            logger.debug("Match Info: "
+                    + "(Region: " + match.getRegion() + ") "
+                    + "(Platform: " + match.getPlatform() + ") "
+                    + "(Game Type: " + match.getGameType() + ") "
+                    + "(Room Id: " + match.getRoomId() + ") "
+                    + "(Note: " + match.getNote() + ") "
+                    + "(From: " + guild.getName() + ") "
+                    + "(Created by: " + event.getMember().getEffectiveName() + ")");
         }
     }
 
