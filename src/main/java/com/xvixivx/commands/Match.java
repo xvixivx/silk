@@ -180,12 +180,12 @@ public class Match extends ListenerAdapter {
                     builder.setTitle("**Command Info**");
                     builder.setColor(Color.RED);
                     builder.setDescription("Multiple channels can receive the matchmaking info");
-                    builder.addField("Set All Attribute", "`-s match set (region :optional) (platform :optional) (game-type :optional)`", false);
-                    builder.addField("Example", "`-s match set eu mobile tournament`", false);
-                    builder.addField("Set Region And Platform", "`-s match set (region) (platform)`", false);
-                    builder.addField("Example", "`-s match set as pc`", false);
-                    builder.addField("Set Platform And Game Type", "`-s match set (platform) (game-type)`", false);
-                    builder.addField("Example", "`-s match set na group`", false);
+                    builder.addField("Set All Attribute", "`-s match set (region :optional) (platform :optional) (game-type :optional)`\n"
+                            + "**Example**: `-s match set eu mobile tournament`", false);
+                    builder.addField("Set Region And Platform", "`-s match set (region) (platform)`\n"
+                            + "**Example**: `-s match set as pc`", false);
+                    builder.addField("Set Platform And Game Type", "`-s match set (platform) (game-type)`\n"
+                            + "**Example**: `-s match set na group`", false);
                     builder.addField("No Filter", "`-s match set`", false);
                     channel.sendMessage(builder.build()).queue();
                     builder.clear();
