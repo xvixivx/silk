@@ -350,7 +350,7 @@ public class Match extends ListenerAdapter {
                 builder.addField("Server", match.getRegion(), false);
                 builder.addField("Platform", match.getPlatform(), false);
                 builder.addField("Game Type", match.getGameType(), false);
-                builder.addField("Room ID", match.getRoomId(), false);
+                builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
                 builder.addField("Note", match.getNote(), false);
                 builder.addField("From ", guild.getName(), false);
                 builder.addField("test test", "test test", false);
@@ -393,7 +393,7 @@ public class Match extends ListenerAdapter {
                 builder.addField("Server", match.getRegion(), false);
                 builder.addField("Platform", match.getPlatform(), false);
                 builder.addField("Game Type", match.getGameType(), false);
-                builder.addField("Room ID", match.getRoomId(), false);
+                builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
                 builder.addField("Note", match.getNote(), false);
                 builder.addField("From", guild.getName(), false);
                 builder.setFooter("Created by " + event.getMember().getEffectiveName(),
@@ -413,7 +413,7 @@ public class Match extends ListenerAdapter {
                 builder.addField("Server", match.getRegion(), false);
                 builder.addField("Platform", match.getPlatform(), false);
                 builder.addField("Game Type", match.getGameType(), false);
-                builder.addField("Room ID", match.getRoomId(), false);
+                builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
                 builder.addField("Note", match.getNote(), false);
                 builder.addField("From", guild.getName(), false);
                 builder.setFooter("Created by " + event.getMember().getEffectiveName(),
@@ -426,7 +426,7 @@ public class Match extends ListenerAdapter {
                     + "(Region: " + match.getRegion() + ") "
                     + "(Platform: " + match.getPlatform() + ") "
                     + "(Game Type: " + match.getGameType() + ") "
-                    + "(Room Id: " + match.getRoomId() + ") "
+                    + "(Room Id: " + match.getRoomId().toUpperCase() + ") "
                     + "(Note: " + match.getNote() + ") "
                     + "(From: " + guild.getName() + ") "
                     + "(Created by: " + event.getMember().getEffectiveName() + ")");
