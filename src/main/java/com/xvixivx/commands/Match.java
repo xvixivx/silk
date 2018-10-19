@@ -132,7 +132,7 @@ public class Match extends ListenerAdapter {
             return;
         }
         // Check permission
-        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE))
+        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS))
         {
             return;
         }
@@ -179,7 +179,7 @@ public class Match extends ListenerAdapter {
                 {
                     builder.setTitle("**Command Info**");
                     builder.setColor(Color.RED);
-                    builder.setDescription("Multiple channels can receive the matchmaking info");
+                    builder.setDescription("Filters");
                     builder.addField("Set All Attribute", "`-s match set (region :optional) (platform :optional) (game-type :optional)`\n"
                             + "**Example**: `-s match set eu mobile tournament`", false);
                     builder.addField("Set Region And Platform", "`-s match set (region) (platform)`\n"
@@ -345,20 +345,7 @@ public class Match extends ListenerAdapter {
 
             if (matchChannels.size() == 0)
             {
-                builder.setTitle("**Match**");
-                builder.setColor(Color.CYAN);
-                builder.addField("Server", match.getRegion(), false);
-                builder.addField("Platform", match.getPlatform(), false);
-                builder.addField("Game Type", match.getGameType(), false);
-                builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
-                builder.addField("Note", match.getNote(), false);
-                builder.addField("From ", guild.getName(), false);
-                builder.addField("test test", "test test", false);
-                builder.setFooter("Created by " + event.getMember().getEffectiveName(),
-                        event.getAuthor().getEffectiveAvatarUrl());
-                channel.sendMessage(builder.build()).queue();
-                builder.clear();
-                return;
+                matchInfo(event, channel, builder, match);
             }
 
             boolean matchChannelTableHasThisChannel = false;
@@ -388,18 +375,16 @@ public class Match extends ListenerAdapter {
                     logger.debug("Channel: " + target.getChannelName());
                     continue;
                 }
-                builder.setTitle("**Match**");
-                builder.setColor(Color.CYAN);
-                builder.addField("Server", match.getRegion(), false);
-                builder.addField("Platform", match.getPlatform(), false);
-                builder.addField("Game Type", match.getGameType(), false);
-                builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
-                builder.addField("Note", match.getNote(), false);
-                builder.addField("From", guild.getName(), false);
-                builder.setFooter("Created by " + event.getMember().getEffectiveName(),
-                        event.getAuthor().getEffectiveAvatarUrl());
-                targetChannel.sendMessage(builder.build()).queue();
-                builder.clear();
+                // Check Permission
+                if (!targetGuild.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_EMBED_LINKS))
+                {
+                    logger.debug("Permission.MESSAGE_EMBED_LINKS Required");
+                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Channel: " + target.getChannelName());
+                    continue;
+                }
+
+                matchInfo(event, targetChannel, builder, match);
 
                 if (guild.getIdLong() == targetGuild.getIdLong() && channel.getIdLong() == targetChannel.getIdLong())
                 {
@@ -408,18 +393,7 @@ public class Match extends ListenerAdapter {
             }
             if (!matchChannelTableHasThisChannel)
             {
-                builder.setTitle("**Match**");
-                builder.setColor(Color.CYAN);
-                builder.addField("Server", match.getRegion(), false);
-                builder.addField("Platform", match.getPlatform(), false);
-                builder.addField("Game Type", match.getGameType(), false);
-                builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
-                builder.addField("Note", match.getNote(), false);
-                builder.addField("From", guild.getName(), false);
-                builder.setFooter("Created by " + event.getMember().getEffectiveName(),
-                        event.getAuthor().getEffectiveAvatarUrl());
-                channel.sendMessage(builder.build()).queue();
-                builder.clear();
+                matchInfo(event, channel, builder, match);
             }
 
             logger.debug("Match Info: "
@@ -431,6 +405,26 @@ public class Match extends ListenerAdapter {
                     + "(From: " + guild.getName() + ") "
                     + "(Created by: " + event.getMember().getEffectiveName() + ")");
         }
+    }
+
+    private void matchInfo(MessageReceivedEvent event, TextChannel channel, EmbedBuilder builder, MatchDTO match)
+    {
+        Guild guild = event.getGuild();
+
+        builder.setTitle("**Match**");
+        builder.setColor(Color.CYAN);
+        builder.addField("Server", match.getRegion(), false);
+        builder.addField("Platform", match.getPlatform(), false);
+        builder.addField("Game Type", match.getGameType(), false);
+        builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
+        builder.addField("Note", match.getNote(), false);
+        builder.addField("From", guild.getName(), false);
+        builder.setFooter("Created by " + event.getMember().getEffectiveName(),
+                event.getAuthor().getEffectiveAvatarUrl());
+
+        channel.sendMessage(builder.build()).queue();
+
+        builder.clear();
     }
 
     private void commandInfo(TextChannel channel, EmbedBuilder builder)

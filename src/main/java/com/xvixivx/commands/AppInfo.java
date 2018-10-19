@@ -45,7 +45,7 @@ public class AppInfo extends ListenerAdapter {
             return;
         }
         // Check permission
-        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE))
+        if (!guild.getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS))
         {
             return;
         }
