@@ -432,10 +432,10 @@ public class Match extends ListenerAdapter {
         builder.setTitle("**Command Information**");
         builder.setColor(Color.RED);
         builder.addField("usage", "-s match (region) (platform) (game-type) (room-id) (note: optional)", false);
-        builder.addField("example", "-s match eu mobile tournament 8E3RC", false);
+        builder.addField("example", "-s match eu mobile tournament 8E3RCCCE\n" + "-s match eu m t 8E3RCCCE", false);
         builder.addField("region", "as = asia, eu = european union, na = north america, sa = south america", false);
-        builder.addField("platform", "pc or mobile", false);
-        builder.addField("game-type", "group or tournament", false);
+        builder.addField("platform", "pc or mobile (p or m)", false);
+        builder.addField("game-type", "group or tournament (g or t)", false);
         channel.sendMessage(builder.build()).queue();
         builder.clear();
         return;

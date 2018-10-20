@@ -2,6 +2,9 @@ package com.xvixivx.dto;
 
 import com.xvixivx.util.Content;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MatchDTO {
 
     private String region;
@@ -47,6 +50,18 @@ public class MatchDTO {
     {
         String platforms[] = {"pc", "mobile"};
 
+        HashMap<String, String> map = new HashMap<>();
+        map.put("p", platforms[0]);
+        map.put("m", platforms[1]);
+
+        for (Map.Entry<String, String> entry : map.entrySet())
+        {
+            if (entry.getKey().equalsIgnoreCase(platform))
+            {
+                platform = entry.getValue();
+            }
+        }
+
         if (Content.isMatch(platform, platforms))
         {
             this.platform = platform;
@@ -60,6 +75,19 @@ public class MatchDTO {
     public void setGameType(String gameType)
     {
         String gameTypes[] = {"group", "tournament"};
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("g", gameTypes[0]);
+        map.put("t", gameTypes[1]);
+
+        for (Map.Entry<String, String> entry : map.entrySet())
+        {
+            if (entry.getKey().equalsIgnoreCase(gameType))
+            {
+                gameType = entry.getValue();
+            }
+        }
+
         if (Content.isMatch(gameType, gameTypes))
         {
             this.gameType = gameType;
