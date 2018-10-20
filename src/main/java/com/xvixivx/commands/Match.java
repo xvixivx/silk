@@ -163,6 +163,9 @@ public class Match extends ListenerAdapter {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
                     builder.setDescription("Permission Required");
+                    channel.sendMessage(builder.build()).queue();
+                    builder.clear();
+                    return;
                 }
                 int maxArguments = 6;
                 if (contents.length > maxArguments)
@@ -233,6 +236,9 @@ public class Match extends ListenerAdapter {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
                     builder.setDescription("Permission Required");
+                    channel.sendMessage(builder.build()).queue();
+                    builder.clear();
+                    return;
                 }
                 boolean receive = true;
                 int result = 0;
@@ -270,6 +276,9 @@ public class Match extends ListenerAdapter {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
                     builder.setDescription("Permission Required");
+                    channel.sendMessage(builder.build()).queue();
+                    builder.clear();
+                    return;
                 }
                 boolean receive = false;
                 int result = 0;
