@@ -241,14 +241,8 @@ public class Match extends ListenerAdapter {
                     return;
                 }
                 boolean receive = true;
-                int result = 0;
 
-                matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
-
-                if (Objects.nonNull(matchChannel))
-                {
-                    result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
-                }
+                int result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
 
                 if (result != 0)
                 {
@@ -261,7 +255,8 @@ public class Match extends ListenerAdapter {
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
-                    builder.setDescription("Something happened...");
+                    builder.setDescription("This channel has not been set yet\n"
+                            + "Please type `-s match set (region) (platform) (game-type)`");
                     channel.sendMessage(builder.build()).queue();
                 }
                 builder.clear();
@@ -281,14 +276,8 @@ public class Match extends ListenerAdapter {
                     return;
                 }
                 boolean receive = false;
-                int result = 0;
 
-                matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
-
-                if (Objects.nonNull(matchChannel))
-                {
-                    result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
-                }
+                int result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
 
                 if (result != 0)
                 {
@@ -301,7 +290,7 @@ public class Match extends ListenerAdapter {
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
-                    builder.setDescription("Something happened...");
+                    builder.setDescription("This channel has not been set yet\n");
                     channel.sendMessage(builder.build()).queue();
                 }
                 builder.clear();
@@ -310,7 +299,9 @@ public class Match extends ListenerAdapter {
 
             matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
 
-            if (Objects.isNull(matchChannel))
+            // If Database doesn't have the current channel data, show error message.
+            // TODO: Check if it is ok or not. matchChannel is always not null.
+            if (matchChannel.getChannelId() == 0)
             {
                 builder.setTitle("**Error**");
                 builder.setColor(Color.RED);

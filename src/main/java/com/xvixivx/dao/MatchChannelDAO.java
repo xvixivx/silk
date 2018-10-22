@@ -68,8 +68,8 @@ public class MatchChannelDAO {
                     + "platform, "
                     + "game_type, "
                     + "receive "
-                    + "FROM guilds "
-                    + "LEFT JOIN match_channels "
+                    + "FROM match_channels "
+                    + "LEFT JOIN guilds "
                     + "ON guilds.id = guild_id "
                     + "WHERE guild_id = ? AND channel_id = ? ";
             pstmt = connection.prepareStatement(sql);
@@ -136,8 +136,8 @@ public class MatchChannelDAO {
                     + "guilds.name, "
                     + "channel_id, "
                     + "match_channels.name "
-                    + "FROM guilds "
-                    + "LEFT JOIN match_channels "
+                    + "FROM match_channels "
+                    + "LEFT JOIN guilds "
                     + "ON guilds.id = guild_id "
                     + "WHERE (match_channels.region = ? OR match_channels.region IS NULL) "
                     + "AND (platform = ? OR platform IS NULL) "
