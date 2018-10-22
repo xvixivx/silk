@@ -54,12 +54,13 @@ public class Help extends ListenerAdapter {
             builder.setTitle("**Command List**");
             builder.setColor(Color.CYAN);
             builder.setDescription("This server's prefix is `-s`");
-            builder.addField("agent", "mcvs agent info", false);
-            builder.addField("bot", "bot info ", false);
-            builder.addField("guild", "guild info ", false);
-            builder.addField("match", "send match info to the other guilds", false);
-            builder.addField("match set help", "help of a matchmaking channel settings", false);
-            builder.addField("invite", "make the invitation link", false);
+            builder.addField("-s agent", "mcvs agent info", false);
+            builder.addField("-s bot", "bot info ", false);
+            builder.addField("-s guild", "guild info ", false);
+            builder.addField("-s match", "send match info to the other guilds", false);
+            builder.addField("-s match set help", "help of a matchmaking channel settings", false);
+            builder.addField("-s match list", "guild list", false);
+            builder.addField("-s invite", "make the invitation link", false);
             channel.sendMessage(builder.build()).queue();
         }
     }

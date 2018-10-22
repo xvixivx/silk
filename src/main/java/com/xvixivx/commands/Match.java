@@ -142,7 +142,6 @@ public class Match extends ListenerAdapter {
         {
             EmbedBuilder builder = new EmbedBuilder();
             GuildDAO guildDAO = new GuildDAO();
-            GuildDTO guildData = guildDAO.find(guild.getId());
             MatchChannelDAO matchChannelDAO = new MatchChannelDAO();
             MatchChannelDTO matchChannel;
 
@@ -293,6 +292,31 @@ public class Match extends ListenerAdapter {
                     builder.setDescription("This channel has not been set yet\n");
                     channel.sendMessage(builder.build()).queue();
                 }
+                builder.clear();
+                return;
+            }
+
+            // -s match list
+            if (contents[2].equalsIgnoreCase("guilds"))
+            {
+                List<GuildDTO> guilds = guildDAO.findAll();
+
+                if (guilds.size() == 0)
+                {
+                    builder.setTitle("Error");
+                    builder.setColor(Color.RED);
+                    builder.setDescription("Connection Error");
+                    channel.sendMessage(builder.build()).queue();
+                    builder.clear();
+                }
+
+                builder.setTitle("Guilds");
+                builder.setColor(Color.CYAN);
+                for (GuildDTO target : guilds)
+                {
+                    builder.appendDescription(target.getName() + " (" + target.getRegion() + ")\n");
+                }
+                channel.sendMessage(builder.build()).queue();
                 builder.clear();
                 return;
             }

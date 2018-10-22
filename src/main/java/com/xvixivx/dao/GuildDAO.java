@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class GuildDAO {
@@ -104,6 +106,65 @@ public class GuildDAO {
         }
 
         return guild;
+    }
+
+    public List<GuildDTO> findAll()
+    {
+        this.initialize();
+        List<GuildDTO> guilds = new ArrayList<>();
+
+        // Send Query
+        try
+        {
+            connection = DriverManager.getConnection(url, userName, passWord);
+            String sql = "SELECT "
+                    + "name, "
+                    + "region "
+                    + "FROM guilds ";
+            pstmt = connection.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next())
+            {
+                String name = rs.getString("name");
+                String region = rs.getString("region");
+
+                GuildDTO guild = new GuildDTO(name, region);
+                guilds.add(guild);
+
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (pstmt != null)
+            {
+                try
+                {
+                    pstmt.close();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return guilds;
     }
 
     public int upsertAll(long id, String name, String region)
