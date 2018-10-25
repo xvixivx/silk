@@ -61,6 +61,7 @@ public class GuildDAO {
         {
             connection = DriverManager.getConnection(url, userName, passWord);
             String sql = "SELECT "
+                    + "id, "
                     + "name, "
                     + "region "
                     + "FROM guilds WHERE id = ? ";
@@ -69,10 +70,11 @@ public class GuildDAO {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
+                long id = rs.getLong("id");
                 String name = rs.getString("name");
                 String region = rs.getString("region");
 
-                guild = new GuildDTO(name, region);
+                guild = new GuildDTO(id, name, region);
             }
         }
         catch (SQLException e)
@@ -118,6 +120,7 @@ public class GuildDAO {
         {
             connection = DriverManager.getConnection(url, userName, passWord);
             String sql = "SELECT "
+                    + "id, "
                     + "name, "
                     + "region "
                     + "FROM guilds ";
@@ -126,10 +129,11 @@ public class GuildDAO {
 
             while (rs.next())
             {
+                long id = rs.getLong("id");
                 String name = rs.getString("name");
                 String region = rs.getString("region");
 
-                GuildDTO guild = new GuildDTO(name, region);
+                GuildDTO guild = new GuildDTO(id, name, region);
                 guilds.add(guild);
 
             }

@@ -376,18 +376,20 @@ public class Match extends ListenerAdapter {
 
             for (MatchChannelDTO target : matchChannels)
             {
-                Guild targetGuild = event.getJDA().getGuildById(target.getGuildId());
+                Guild targetGuild = event.getJDA().getGuildById(target.getGuild().getId());
+                String guildName = target.getGuild().getName();
+
                 if (!guilds.contains(targetGuild))
                 {
                     logger.debug("Guild is not exists");
-                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Guild: " + guildName);
                     continue;
                 }
                 TextChannel targetChannel = targetGuild.getTextChannelById(target.getChannelId());
                 if (Objects.isNull(targetChannel))
                 {
                     logger.debug("Channel is not exists");
-                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Guild: " + guildName);
                     logger.debug("Channel: " + target.getChannelName());
                     continue;
                 }
@@ -395,7 +397,7 @@ public class Match extends ListenerAdapter {
                 if (!targetGuild.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_WRITE))
                 {
                     logger.debug("Permission.MESSAGE_WRITE Required");
-                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Guild: " + guildName);
                     logger.debug("Channel: " + target.getChannelName());
                     continue;
                 }
@@ -403,7 +405,7 @@ public class Match extends ListenerAdapter {
                 if (!targetGuild.getSelfMember().hasPermission(targetChannel, Permission.MESSAGE_EMBED_LINKS))
                 {
                     logger.debug("Permission.MESSAGE_EMBED_LINKS Required");
-                    logger.debug("Guild: " + target.getGuildName());
+                    logger.debug("Guild: " + guildName);
                     logger.debug("Channel: " + target.getChannelName());
                     continue;
                 }

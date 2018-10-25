@@ -4,6 +4,7 @@ public class MatchChannelDTO {
 
     private long guildId;
     private String guildName;
+    private GuildDTO guild;
     private long channelId;
     private String channelName;
     private String region;
@@ -13,8 +14,7 @@ public class MatchChannelDTO {
 
     public MatchChannelDTO(){}
 
-    public MatchChannelDTO(long guildId,
-                           String guildName,
+    public MatchChannelDTO(GuildDTO guild,
                            long channelId,
                            String channelName,
                            String region,
@@ -22,8 +22,7 @@ public class MatchChannelDTO {
                            String gameType,
                            boolean receive)
     {
-        this.guildId = guildId;
-        this.guildName = guildName;
+        this.guild = guild;
         this.channelId = channelId;
         this.channelName = channelName;
         this.region = region;
@@ -32,9 +31,7 @@ public class MatchChannelDTO {
         this.receive = receive;
     }
 
-    public long getGuildId() { return guildId; }
-
-    public String getGuildName() { return guildName; }
+    public GuildDTO getGuild() { return guild; }
 
     public long getChannelId() { return channelId; }
 
@@ -48,9 +45,7 @@ public class MatchChannelDTO {
 
     public boolean isReceive() { return receive; }
 
-    public void setGuildId(long guildId) { this.guildId = guildId; }
-
-    public void setGuildName(String guildName) { this.guildName = guildName; }
+    public void setGuild(GuildDTO guild) { this.guild = guild; }
 
     public void setChannelId(long channelId) { this.channelId = channelId; }
 

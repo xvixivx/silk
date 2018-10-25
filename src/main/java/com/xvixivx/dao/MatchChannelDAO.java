@@ -63,6 +63,7 @@ public class MatchChannelDAO {
             connection = DriverManager.getConnection(url, userName, passWord);
             String sql = "SELECT "
                     + "guilds.name, "
+                    + "guilds.region, "
                     + "match_channels.name, "
                     + "match_channels.region, "
                     + "platform, "
@@ -79,14 +80,18 @@ public class MatchChannelDAO {
 
             if (rs.next())
             {
-                String guildName = rs.getString("guilds.name");
+                GuildDTO guild = new GuildDTO();
+                guild.setId(guildId);
+                guild.setName(rs.getString("guilds.name"));
+                guild.setRegion(rs.getString("guilds.region"));
+
                 String channelName = rs.getString("match_channels.name");
                 String region = rs.getString("region");
                 String platform = rs.getString("platform");
                 String gameType = rs.getString("game_type");
                 boolean receive = rs.getBoolean("receive");
 
-                matchChannel = new MatchChannelDTO(guildId, guildName, channelId, channelName, region, platform, gameType, receive);
+                matchChannel = new MatchChannelDTO(guild, channelId, channelName, region, platform, gameType, receive);
             }
         }
         catch (SQLException e)
@@ -126,6 +131,7 @@ public class MatchChannelDAO {
     {
         this.initialize();
         List<MatchChannelDTO> matchChannels = new ArrayList<>();
+        GuildDTO guild = new GuildDTO();
 
         // Send Query
         try
@@ -134,6 +140,7 @@ public class MatchChannelDAO {
             String sql = "SELECT "
                     + "guild_id, "
                     + "guilds.name, "
+                    + "guilds.region, "
                     + "channel_id, "
                     + "match_channels.name "
                     + "FROM match_channels "
@@ -152,12 +159,14 @@ public class MatchChannelDAO {
 
             while (rs.next())
             {
-                long guildId = rs.getLong("guild_id");
-                String guildName = rs.getString("guilds.name");
+                guild.setId(rs.getLong("guild_id"));
+                guild.setName(rs.getString("guilds.name"));
+                guild.setRegion(rs.getString("guilds.region"));
+
                 long channelId = rs.getLong("channel_id");
                 String channelName = rs.getString("match_channels.name");
 
-                MatchChannelDTO matchChannel = new MatchChannelDTO(guildId, guildName, channelId, channelName, region, platform, gameType, receive);
+                MatchChannelDTO matchChannel = new MatchChannelDTO(guild, channelId, channelName, region, platform, gameType, receive);
                 matchChannels.add(matchChannel);
             }
         }

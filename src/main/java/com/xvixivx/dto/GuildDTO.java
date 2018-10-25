@@ -2,6 +2,7 @@ package com.xvixivx.dto;
 
 public class GuildDTO {
 
+    private long id;
     private String name;
     private String region;
 //    private String matchChannelId;
@@ -11,12 +12,16 @@ public class GuildDTO {
     {
     }
 
-    public GuildDTO(String name,
+    public GuildDTO(long id,
+                    String name,
                     String region)
     {
+        this.id = id;
         this.name = name;
         this.region = region;
     }
+
+    public long getId() { return id; }
 
     public String getName() {
         return name;
@@ -26,9 +31,9 @@ public class GuildDTO {
         return region;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setId(long id) { this.id = id; }
+
+    public void setName(String name) { this.name = name; }
 
     public void setRegion(String region) {
         this.region = region;
