@@ -4,6 +4,7 @@ import com.xvixivx.commands.*;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Game;
 
 import javax.security.auth.login.LoginException;
 import java.io.InputStream;
@@ -29,6 +30,8 @@ public class Silk {
             builder.addEventListener(new Agent());
             builder.addEventListener(new Match());
             builder.addEventListener(new Help());
+            // Set Game
+            builder.setGame(Game.of(Game.GameType.DEFAULT,"-s help"));
             // Build
             JDA jda = builder.build();
             // Blocking guarantees that JDA will be completely loaded.
