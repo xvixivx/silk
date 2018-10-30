@@ -31,6 +31,9 @@ public class Silk {
             builder.addEventListener(new Agent());
             builder.addEventListener(new Match());
             builder.addEventListener(new Help());
+            builder.addEventListener(new ShareChannels());
+            // This Class should be the last
+            builder.addEventListener(new ShareMessages());
             // Set Game
             builder.setGame(Game.of(Game.GameType.DEFAULT,"-s help"));
             // Build

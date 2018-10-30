@@ -2,6 +2,7 @@ package com.xvixivx.commands;
 
 import com.xvixivx.dao.GuildDAO;
 import com.xvixivx.dao.MatchChannelDAO;
+import com.xvixivx.dao.SharedChannelDao;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -83,6 +84,12 @@ public class Initialize extends ListenerAdapter {
             logger.error("Delete Error at onTextChannelDelete(TextChannelDeleteEvent event)");
             logger.error("DAO: MatchChannelDAO");
         }
+        result = new SharedChannelDao().delete(guild.getIdLong(), event.getChannel().getIdLong());
+        if (result == 0)
+        {
+            logger.error("Delete Error at onTextChannelDelete(TextChannelDeleteEvent event)");
+            logger.error("DAO: SharedChannelDao");
+        }
     }
 
     @Override
@@ -94,6 +101,12 @@ public class Initialize extends ListenerAdapter {
         {
             logger.error("Update Error at onTextChannelUpdateName(TextChannelUpdateNameEvent event)");
             logger.error("DAO: MatchChannelDAO");
+        }
+        result = new SharedChannelDao().updateChannelName(guild.getIdLong(), channel.getIdLong(), channel.getName());
+        if (result == 0)
+        {
+            logger.error("Update Error at onTextChannelUpdateName(TextChannelUpdateNameEvent event)");
+            logger.error("DAO: SharedChannelDao");
         }
     }
 }
