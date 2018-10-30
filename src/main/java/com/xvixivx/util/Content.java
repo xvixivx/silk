@@ -1,8 +1,12 @@
 package com.xvixivx.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Content {
+
+    final static Logger logger = LoggerFactory.getLogger(Content.class);
 
     public static boolean isRightPrefix(String content)
     {
@@ -36,8 +40,7 @@ public class Content {
         }
         else
         {
-            //TODO: create the logger
-            System.out.println("content is too long");
+            logger.debug("Content is too long");
         }
 
         return result;
@@ -55,8 +58,7 @@ public class Content {
             }
             else
             {
-                //TODO: create the logger
-                System.out.println("content is too long");
+                logger.debug("Content is too long");
             }
         }
 
@@ -73,7 +75,7 @@ public class Content {
         }
         else
         {
-            System.out.println("Denied special character");
+            logger.debug("Denied special character");
         }
 
         return result;
@@ -93,7 +95,7 @@ public class Content {
             }
             else
             {
-                System.out.println("Denied special character");
+                logger.debug("Denied special character");
             }
         }
 
