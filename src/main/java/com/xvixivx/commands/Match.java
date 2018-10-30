@@ -143,7 +143,7 @@ public class Match extends ListenerAdapter {
             EmbedBuilder builder = new EmbedBuilder();
             GuildDAO guildDAO = new GuildDAO();
             MatchChannelDAO matchChannelDAO = new MatchChannelDAO();
-            MatchChannelDTO matchChannel;
+            List<MatchChannelDTO> matchChannels;
 
             // Minimum Arguments set of an example for the set is "-s match set"
             int minimumArgumentsNumberForSet = 3;
@@ -176,7 +176,7 @@ public class Match extends ListenerAdapter {
                     builder.clear();
                     return;
                 }
-//              -s match set help <= command length is 4
+                // -s match set help <= command length is 4
                 if (contents.length == 4 && contents[3].equalsIgnoreCase("help"))
                 {
                     builder.setTitle("**Command Info**");
@@ -321,11 +321,10 @@ public class Match extends ListenerAdapter {
                 return;
             }
 
-            matchChannel = matchChannelDAO.find(guild.getIdLong(), channel.getIdLong());
+            matchChannels = matchChannelDAO.find(guild.getIdLong());
 
-            // If Database doesn't have the current channel data, show error message.
-            // TODO: Check if it is ok or not. matchChannel is always not null.
-            if (matchChannel.getChannelId() == 0)
+            // If Database doesn't have an at least one active receive channel in the current guild, show error message.
+            if (matchChannels.size() == 0)
             {
                 builder.setTitle("**Error**");
                 builder.setColor(Color.RED);
@@ -364,7 +363,7 @@ public class Match extends ListenerAdapter {
             }
 
             List<Guild> guilds = guild.getJDA().getGuilds();
-            List<MatchChannelDTO> matchChannels;
+
             matchChannels = matchChannelDAO.findChannels(match.getRegion(), match.getPlatform(), match.getGameType());
 
             if (matchChannels.size() == 0)

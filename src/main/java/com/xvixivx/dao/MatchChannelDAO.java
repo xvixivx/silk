@@ -52,10 +52,10 @@ public class MatchChannelDAO {
         }
     }
 
-    public MatchChannelDTO find(long guildId, long channelId)
+    public List<MatchChannelDTO> find(long guildId)
     {
         this.initialize();
-        MatchChannelDTO matchChannel = new MatchChannelDTO();
+        List<MatchChannelDTO> matchChannels = new ArrayList<>();
 
         // Send Query
         try
@@ -64,6 +64,7 @@ public class MatchChannelDAO {
             String sql = "SELECT "
                     + "guilds.name, "
                     + "guilds.region, "
+                    + "channel_id, "
                     + "match_channels.name, "
                     + "match_channels.region, "
                     + "platform, "
@@ -72,11 +73,12 @@ public class MatchChannelDAO {
                     + "FROM match_channels "
                     + "LEFT JOIN guilds "
                     + "ON guilds.id = guild_id "
-                    + "WHERE guild_id = ? AND channel_id = ? ";
+                    + "WHERE guild_id = ? "
+                    + "AND receive = true ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, guildId);
-            pstmt.setLong(2, channelId);
             ResultSet rs = pstmt.executeQuery();
+            logger.debug(pstmt.toString());
 
             if (rs.next())
             {
@@ -85,13 +87,15 @@ public class MatchChannelDAO {
                 guild.setName(rs.getString("guilds.name"));
                 guild.setRegion(rs.getString("guilds.region"));
 
+                long channelId = rs.getLong("channel_id");
                 String channelName = rs.getString("match_channels.name");
                 String region = rs.getString("region");
                 String platform = rs.getString("platform");
                 String gameType = rs.getString("game_type");
                 boolean receive = rs.getBoolean("receive");
 
-                matchChannel = new MatchChannelDTO(guild, channelId, channelName, region, platform, gameType, receive);
+                MatchChannelDTO matchChannel = new MatchChannelDTO(guild, channelId, channelName, region, platform, gameType, receive);
+                matchChannels.add(matchChannel);
             }
         }
         catch (SQLException e)
@@ -124,7 +128,7 @@ public class MatchChannelDAO {
             }
         }
 
-        return matchChannel;
+        return matchChannels;
     }
 
     public List<MatchChannelDTO> findChannels(String region, String platform, String gameType)
@@ -155,6 +159,7 @@ public class MatchChannelDAO {
             pstmt.setString(2, platform);
             pstmt.setString(3, gameType);
             ResultSet rs = pstmt.executeQuery();
+            logger.debug(pstmt.toString());
             boolean receive = true;
 
             while (rs.next())
