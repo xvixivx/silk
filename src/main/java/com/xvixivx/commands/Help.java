@@ -62,7 +62,7 @@ public class Help extends ListenerAdapter {
             builder.addField("-s share channel tournament", "share code channel", false);
             builder.addField("-s match", "send match info to the other guilds", false);
             builder.addField("-s match set help", "help of a matchmaking channel settings", false);
-            builder.addField("-s match list", "guild list", false);
+            builder.addField("-s match guilds", "guild list", false);
             channel.sendMessage(builder.build()).queue();
         }
     }

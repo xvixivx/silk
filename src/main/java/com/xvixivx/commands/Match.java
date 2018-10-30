@@ -215,7 +215,7 @@ public class Match extends ListenerAdapter {
                 return;
             }
 
-            // -s match list
+            // -s match guilds
             if (contents[2].equalsIgnoreCase("guilds"))
             {
                 List<GuildDTO> guilds = guildDAO.findAll();
