@@ -24,6 +24,7 @@ public class Silk {
             // Set Bot Token
             builder.setToken(token);
             // Add Event Listener
+            builder.addEventListener(new Initialize());
             builder.addEventListener(new GuildInfo());
             builder.addEventListener(new AppInfo());
             builder.addEventListener(new Invite());
