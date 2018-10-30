@@ -58,8 +58,8 @@ public class Help extends ListenerAdapter {
             builder.addField("-s agent", "mcvs agent info", false);
             builder.addField("-s bot", "bot info ", false);
             builder.addField("-s guild", "guild info ", false);
-            builder.addField("-s share channel pvp", "share code channel", false);
-            builder.addField("-s share channel tournament", "share code channel", false);
+            builder.addField("-s share channel pvp", "share pvp code channel", false);
+            builder.addField("-s share channel tournament", "share tournament code channel", false);
             builder.addField("-s match", "send match info to the other guilds", false);
             builder.addField("-s match set help", "help of a matchmaking channel settings", false);
             builder.addField("-s match guilds", "guild list", false);
