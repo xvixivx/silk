@@ -76,7 +76,7 @@ public class Match extends ListenerAdapter {
             // -s match set
             if (contents[2].equalsIgnoreCase("set"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
@@ -149,7 +149,7 @@ public class Match extends ListenerAdapter {
             // -s match on
             if (contents[2].equalsIgnoreCase("on"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
@@ -184,7 +184,7 @@ public class Match extends ListenerAdapter {
             // -s match off
             if (contents[2].equalsIgnoreCase("off"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);

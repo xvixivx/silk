@@ -85,11 +85,11 @@ public class ShareChannels extends ListenerAdapter {
             // -s share channel tournament
             if (contents[3].equalsIgnoreCase("tournament"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
-                    builder.setDescription("Permission Required\n" + "Only server owner can change the channel settings");
+                    builder.setDescription("Permission Required\n" + "Only server owner or administrator can change the channel settings");
                     channel.sendMessage(builder.build()).queue();
                     builder.clear();
                     return;
@@ -131,11 +131,11 @@ public class ShareChannels extends ListenerAdapter {
             // -s share channel pvp
             if (contents[3].equalsIgnoreCase("pvp"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
-                    builder.setDescription("Permission Required\n" + "Only server owner can change the channel settings");
+                    builder.setDescription("Permission Required\n" + "Only server owner or administrator can change the channel settings");
                     channel.sendMessage(builder.build()).queue();
                     builder.clear();
                     return;
@@ -182,7 +182,7 @@ public class ShareChannels extends ListenerAdapter {
             // -s share channel on
             if (contents[3].equalsIgnoreCase("on"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
@@ -217,7 +217,7 @@ public class ShareChannels extends ListenerAdapter {
             // -s share channel off
             if (contents[3].equalsIgnoreCase("off"))
             {
-                if (!event.getMember().isOwner())
+                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     builder.setTitle("**Error**");
                     builder.setColor(Color.RED);
