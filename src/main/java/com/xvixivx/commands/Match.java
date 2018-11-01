@@ -363,6 +363,11 @@ public class Match extends ListenerAdapter {
         builder.addField("Room ID", match.getRoomId().toUpperCase(), false);
         builder.addField("Note", match.getNote(), false);
         builder.addField("From", guild.getName(), false);
+        if (match.getGameType().equalsIgnoreCase("tournament"))
+        {
+            String earthGlobeAmericas = "\uD83C\uDF0E";
+            builder.addField("It's a tournament !", earthGlobeAmericas + " You can play the tournament beyond the server region", false);
+        }
         builder.setFooter("Created by " + event.getMember().getEffectiveName(),
                 event.getAuthor().getEffectiveAvatarUrl());
 
