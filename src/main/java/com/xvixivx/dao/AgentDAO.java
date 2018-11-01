@@ -1,6 +1,8 @@
 package com.xvixivx.dao;
 
 import com.xvixivx.dto.AgentDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +19,8 @@ public class AgentDAO {
 
     public List<AgentDTO> findAgent(String agentName)
     {
+        final Logger logger = LoggerFactory.getLogger(AgentDAO.class);
+
         Connection connection = null;
         PreparedStatement pstmt = null;
         List<AgentDTO> agents = new ArrayList<>();
@@ -63,6 +67,7 @@ public class AgentDAO {
                     + "FROM agents WHERE name = ? ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, agentName);
+            logger.debug("AgentDAO SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next())

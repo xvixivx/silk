@@ -67,6 +67,7 @@ public class GuildDAO {
                     + "FROM guilds WHERE id = ? ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, guildId);
+            logger.debug("GuildDAO SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -125,6 +126,7 @@ public class GuildDAO {
                     + "region "
                     + "FROM guilds ";
             pstmt = connection.prepareStatement(sql);
+            logger.debug("GuildDAO SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next())
@@ -193,7 +195,7 @@ public class GuildDAO {
             pstmt.setLong(4, id);
             pstmt.setString(5, name);
             pstmt.setString(6, region);
-            logger.debug(pstmt.toString());
+            logger.debug("GuildDAO SQL: " + pstmt.toString());
 
             result = pstmt.executeUpdate();
             connection.commit();
@@ -250,7 +252,7 @@ public class GuildDAO {
                     + "WHERE id = ? ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, id);
-
+            logger.debug("GuildDAO SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }
