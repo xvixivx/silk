@@ -76,7 +76,8 @@ public class SharedChannelDao {
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, guildId);
             pstmt.setLong(2, channelId);
-            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
+            // This logger is called frequently
+            // logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next())
