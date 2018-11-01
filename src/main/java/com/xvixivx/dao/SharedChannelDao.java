@@ -76,6 +76,7 @@ public class SharedChannelDao {
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, guildId);
             pstmt.setLong(2, channelId);
+            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next())
@@ -150,6 +151,7 @@ public class SharedChannelDao {
                     + "AND receive = true ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, "tournament");
+            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
             boolean receive = true;
 
@@ -226,8 +228,8 @@ public class SharedChannelDao {
             pstmt.setString(1, "pvp");
             pstmt.setString(2, region);
             pstmt.setString(3, platform);
+            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
-            logger.debug(pstmt.toString());
             boolean receive = true;
 
             while (rs.next())
@@ -307,7 +309,6 @@ public class SharedChannelDao {
             pstmt.setString(13, platform);
             pstmt.setBoolean(14, receive);
             logger.debug("SharedChannelDao SQL: " + pstmt.toString());
-
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -377,7 +378,6 @@ public class SharedChannelDao {
             pstmt.setString(9, "tournament");
             pstmt.setBoolean(10, receive);
             logger.debug("SharedChannelDao SQL: " + pstmt.toString());
-
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -436,7 +436,7 @@ public class SharedChannelDao {
             pstmt.setBoolean(1, receive);
             pstmt.setLong(2, guildId);
             pstmt.setLong(3, channelId);
-
+            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -495,7 +495,7 @@ public class SharedChannelDao {
             pstmt.setString(1, name);
             pstmt.setLong(2, guildId);
             pstmt.setLong(3, channelId);
-
+            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -552,7 +552,7 @@ public class SharedChannelDao {
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, guildId);
             pstmt.setLong(2, channelId);
-
+            logger.debug("SharedChannelDao SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }

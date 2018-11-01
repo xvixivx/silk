@@ -77,8 +77,8 @@ public class MatchChannelDAO {
                     + "AND receive = true ";
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, guildId);
+            logger.debug("MatchChannelDAO SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
-            logger.debug(pstmt.toString());
 
             if (rs.next())
             {
@@ -158,8 +158,8 @@ public class MatchChannelDAO {
             pstmt.setString(1, region);
             pstmt.setString(2, platform);
             pstmt.setString(3, gameType);
+            logger.debug("MatchChannelDAO SQL: " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
-            logger.debug(pstmt.toString());
             boolean receive = true;
 
             while (rs.next())
@@ -239,7 +239,6 @@ public class MatchChannelDAO {
             pstmt.setString(13, gameType);
             pstmt.setBoolean(14, receive);
             logger.debug("MatchChannelDAO SQL: " + pstmt.toString());
-
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -298,7 +297,7 @@ public class MatchChannelDAO {
             pstmt.setBoolean(1, receive);
             pstmt.setLong(2, guildId);
             pstmt.setLong(3, channelId);
-
+            logger.debug("MatchChannelDAO SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -357,7 +356,7 @@ public class MatchChannelDAO {
             pstmt.setString(1, name);
             pstmt.setLong(2, guildId);
             pstmt.setLong(3, channelId);
-
+            logger.debug("MatchChannelDAO SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }
@@ -414,7 +413,7 @@ public class MatchChannelDAO {
             pstmt = connection.prepareStatement(sql);
             pstmt.setLong(1, guildId);
             pstmt.setLong(2, channelId);
-
+            logger.debug("MatchChannelDAO SQL: " + pstmt.toString());
             result = pstmt.executeUpdate();
             connection.commit();
         }
