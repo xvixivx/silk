@@ -149,69 +149,16 @@ public class Match extends ListenerAdapter {
             // -s match on
             if (contents[2].equalsIgnoreCase("on"))
             {
-                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
-                {
-                    builder.setTitle("**Error**");
-                    builder.setColor(Color.RED);
-                    builder.setDescription("Permission Required");
-                    channel.sendMessage(builder.build()).queue();
-                    builder.clear();
-                    return;
-                }
                 boolean receive = true;
-
-                int result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
-
-                if (result != 0)
-                {
-                    builder.setTitle("**Success!**");
-                    builder.setColor(Color.CYAN);
-                    builder.setDescription("Match Receive Setting is On");
-                    channel.sendMessage(builder.build()).queue();
-                }
-                else
-                {
-                    builder.setTitle("**Error**");
-                    builder.setColor(Color.RED);
-                    builder.setDescription("This channel has not been set yet\n"
-                            + "Please type `-s match set (region) (platform) (game-type)`");
-                    channel.sendMessage(builder.build()).queue();
-                }
-                builder.clear();
+                toggleReceiveStatus(event, builder, matchChannelDAO, receive);
                 return;
             }
 
             // -s match off
             if (contents[2].equalsIgnoreCase("off"))
             {
-                if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
-                {
-                    builder.setTitle("**Error**");
-                    builder.setColor(Color.RED);
-                    builder.setDescription("Permission Required");
-                    channel.sendMessage(builder.build()).queue();
-                    builder.clear();
-                    return;
-                }
                 boolean receive = false;
-
-                int result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
-
-                if (result != 0)
-                {
-                    builder.setTitle("**Success!**");
-                    builder.setColor(Color.CYAN);
-                    builder.setDescription("Match Receive Setting is Off");
-                    channel.sendMessage(builder.build()).queue();
-                }
-                else
-                {
-                    builder.setTitle("**Error**");
-                    builder.setColor(Color.RED);
-                    builder.setDescription("This channel has not been set yet\n");
-                    channel.sendMessage(builder.build()).queue();
-                }
-                builder.clear();
+                toggleReceiveStatus(event, builder, matchChannelDAO, receive);
                 return;
             }
 
@@ -349,6 +296,56 @@ public class Match extends ListenerAdapter {
                     + "(From: " + guild.getName() + ") "
                     + "(Created by: " + event.getMember().getEffectiveName() + ")");
         }
+    }
+
+    private void toggleReceiveStatus(MessageReceivedEvent event, EmbedBuilder builder, MatchChannelDAO matchChannelDAO, boolean receive)
+    {
+        Guild guild = event.getGuild();
+        TextChannel channel = event.getTextChannel();
+        String description;
+
+        if (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))
+        {
+            builder.setTitle("**Error**");
+            builder.setColor(Color.RED);
+            builder.setDescription("Permission Required");
+            channel.sendMessage(builder.build()).queue();
+            builder.clear();
+            return;
+        }
+
+        int result = matchChannelDAO.updateReceive(guild.getIdLong(), channel.getIdLong(), receive);
+
+        if (result != 0)
+        {
+            builder.setTitle("**Success!**");
+            builder.setColor(Color.CYAN);
+            description = "Match Receive Setting is ";
+            if (receive)
+            {
+                description += "On";
+            }
+            else
+            {
+                description += "Off";
+            }
+            builder.setDescription(description);
+            channel.sendMessage(builder.build()).queue();
+        }
+        else
+        {
+            builder.setTitle("**Error**");
+            builder.setColor(Color.RED);
+            description = "This channel has not been set yet\n";
+            if (receive)
+            {
+                description += "Please type `-s match set (region) (platform) (game-type)`";
+            }
+            builder.setDescription(description);
+            channel.sendMessage(builder.build()).queue();
+        }
+        builder.clear();
+        return;
     }
 
     private void matchInfo(MessageReceivedEvent event, TextChannel channel, EmbedBuilder builder, MatchDTO match)
