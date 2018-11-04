@@ -2,7 +2,7 @@ package com.xvixivx.dto;
 
 public class MatchChannelDTO {
 
-    private GuildDTO guild = new GuildDTO();
+    private GuildDTO guild;
     private long channelId;
     private String channelName;
     private String region;
@@ -20,10 +20,7 @@ public class MatchChannelDTO {
                            String gameType,
                            boolean receive)
     {
-        // If I write like this.guild = guild, All MatchChannelDTO will have same GuildDTO Instance
-        this.guild.setId(guild.getId());
-        this.guild.setName(guild.getName());
-        this.guild.setRegion(guild.getRegion());
+        this.guild = new GuildDTO(guild.getId(), guild.getName(), guild.getRegion());
         this.channelId = channelId;
         this.channelName = channelName;
         this.region = region;
