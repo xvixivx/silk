@@ -25,7 +25,7 @@ import java.util.List;
 
 public class CommandHandler extends ListenerAdapter {
 
-    final Logger logger = LoggerFactory.getLogger(CommandHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(CommandHandler.class);
 
     private Jedis jedis;
 

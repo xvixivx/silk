@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class Match extends ListenerAdapter {
 
-    final Logger logger = LoggerFactory.getLogger(Match.class);
+    private final Logger logger = LoggerFactory.getLogger(Match.class);
 
     public void run(MessageReceivedEvent event)
     {
