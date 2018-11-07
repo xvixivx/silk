@@ -1,5 +1,6 @@
-package com.xvixivx.commands;
+package com.xvixivx.core;
 
+import com.xvixivx.commands.*;
 import com.xvixivx.dao.GuildDAO;
 import com.xvixivx.dao.MatchChannelDAO;
 import com.xvixivx.dao.SharedChannelDao;
@@ -40,7 +41,7 @@ public class CommandHandler extends ListenerAdapter {
     private ShareChannels shareChannels;
     private ShareMessages shareMessages;
 
-    public CommandHandler()
+    CommandHandler()
     {
         this.jedis = new Jedis("localhost", 6379);
         this.invite = new Invite();
