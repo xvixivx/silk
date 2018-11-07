@@ -1,6 +1,6 @@
 package com.xvixivx.dao;
 
-import com.xvixivx.dto.GuildDTO;
+import com.xvixivx.dto.GuildDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class GuildDAO {
+public class GuildDao {
 
     private Connection connection = null;
     private PreparedStatement pstmt = null;
@@ -20,7 +20,7 @@ public class GuildDAO {
     private String userName = "";
     private String passWord = "";
 
-    final Logger logger = LoggerFactory.getLogger(GuildDAO.class);
+    final Logger logger = LoggerFactory.getLogger(GuildDao.class);
 
     private void initialize()
     {
@@ -50,10 +50,10 @@ public class GuildDAO {
         }
     }
 
-    public GuildDTO find(String guildId)
+    public GuildDto find(String guildId)
     {
         this.initialize();
-        GuildDTO guild = new GuildDTO();
+        GuildDto guild = new GuildDto();
 
         // Send Query
         try
@@ -74,7 +74,7 @@ public class GuildDAO {
                 String name = rs.getString("name");
                 String region = rs.getString("region");
 
-                guild = new GuildDTO(id, name, region);
+                guild = new GuildDto(id, name, region);
             }
         }
         catch (SQLException e)
@@ -110,10 +110,10 @@ public class GuildDAO {
         return guild;
     }
 
-    public List<GuildDTO> findAll()
+    public List<GuildDto> findAll()
     {
         this.initialize();
-        List<GuildDTO> guilds = new ArrayList<>();
+        List<GuildDto> guilds = new ArrayList<>();
 
         // Send Query
         try
@@ -134,7 +134,7 @@ public class GuildDAO {
                 String name = rs.getString("name");
                 String region = rs.getString("region");
 
-                GuildDTO guild = new GuildDTO(id, name, region);
+                GuildDto guild = new GuildDto(id, name, region);
                 guilds.add(guild);
 
             }

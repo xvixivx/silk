@@ -1,8 +1,7 @@
 package com.xvixivx.dao;
 
-import com.xvixivx.dto.GuildDTO;
-import com.xvixivx.dto.MatchChannelDTO;
-import com.xvixivx.dto.MatchDTO;
+import com.xvixivx.dto.GuildDto;
+import com.xvixivx.dto.MatchChannelDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class MatchChannelDAO {
+public class MatchChannelDao {
 
     private Connection connection = null;
     private PreparedStatement pstmt = null;
@@ -22,7 +21,7 @@ public class MatchChannelDAO {
     private String userName = "";
     private String passWord = "";
 
-    final Logger logger = LoggerFactory.getLogger(GuildDAO.class);
+    final Logger logger = LoggerFactory.getLogger(GuildDao.class);
 
     private void initialize()
     {
@@ -52,10 +51,10 @@ public class MatchChannelDAO {
         }
     }
 
-    public List<MatchChannelDTO> find(long guildId)
+    public List<MatchChannelDto> find(long guildId)
     {
         this.initialize();
-        List<MatchChannelDTO> matchChannels = new ArrayList<>();
+        List<MatchChannelDto> matchChannels = new ArrayList<>();
 
         // Send Query
         try
@@ -82,7 +81,7 @@ public class MatchChannelDAO {
 
             if (rs.next())
             {
-                GuildDTO guild = new GuildDTO();
+                GuildDto guild = new GuildDto();
                 guild.setId(guildId);
                 guild.setName(rs.getString("guilds.name"));
                 guild.setRegion(rs.getString("guilds.region"));
@@ -94,7 +93,7 @@ public class MatchChannelDAO {
                 String gameType = rs.getString("game_type");
                 boolean receive = rs.getBoolean("receive");
 
-                MatchChannelDTO matchChannel = new MatchChannelDTO(guild, channelId, channelName, region, platform, gameType, receive);
+                MatchChannelDto matchChannel = new MatchChannelDto(guild, channelId, channelName, region, platform, gameType, receive);
                 matchChannels.add(matchChannel);
             }
         }
@@ -131,11 +130,11 @@ public class MatchChannelDAO {
         return matchChannels;
     }
 
-    public List<MatchChannelDTO> findChannels(String region, String platform, String gameType)
+    public List<MatchChannelDto> findChannels(String region, String platform, String gameType)
     {
         this.initialize();
-        List<MatchChannelDTO> matchChannels = new ArrayList<>();
-        GuildDTO guild = new GuildDTO();
+        List<MatchChannelDto> matchChannels = new ArrayList<>();
+        GuildDto guild = new GuildDto();
 
         // Send Query
         try
@@ -171,7 +170,7 @@ public class MatchChannelDAO {
                 long channelId = rs.getLong("channel_id");
                 String channelName = rs.getString("match_channels.name");
 
-                MatchChannelDTO matchChannel = new MatchChannelDTO(guild, channelId, channelName, region, platform, gameType, receive);
+                MatchChannelDto matchChannel = new MatchChannelDto(guild, channelId, channelName, region, platform, gameType, receive);
                 matchChannels.add(matchChannel);
             }
         }

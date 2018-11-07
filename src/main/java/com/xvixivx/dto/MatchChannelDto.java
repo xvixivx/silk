@@ -1,8 +1,8 @@
 package com.xvixivx.dto;
 
-public class MatchChannelDTO {
+public class MatchChannelDto {
 
-    private GuildDTO guild;
+    private GuildDto guild;
     private long channelId;
     private String channelName;
     private String region;
@@ -10,9 +10,9 @@ public class MatchChannelDTO {
     private String gameType;
     private boolean receive;
 
-    public MatchChannelDTO(){}
+    public MatchChannelDto(){}
 
-    public MatchChannelDTO(GuildDTO guild,
+    public MatchChannelDto(GuildDto guild,
                            long channelId,
                            String channelName,
                            String region,
@@ -20,7 +20,7 @@ public class MatchChannelDTO {
                            String gameType,
                            boolean receive)
     {
-        this.guild = new GuildDTO(guild.getId(), guild.getName(), guild.getRegion());
+        this.guild = new GuildDto(guild.getId(), guild.getName(), guild.getRegion());
         this.channelId = channelId;
         this.channelName = channelName;
         this.region = region;
@@ -29,7 +29,7 @@ public class MatchChannelDTO {
         this.receive = receive;
     }
 
-    public GuildDTO getGuild() { return guild; }
+    public GuildDto getGuild() { return guild; }
 
     public long getChannelId() { return channelId; }
 
@@ -43,7 +43,7 @@ public class MatchChannelDTO {
 
     public boolean isReceive() { return receive; }
 
-    public void setGuild(GuildDTO guild) { this.guild = guild; }
+    public void setGuild(GuildDto guild) { this.guild = guild; }
 
     public void setChannelId(long channelId) { this.channelId = channelId; }
 

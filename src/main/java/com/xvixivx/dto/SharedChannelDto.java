@@ -2,7 +2,7 @@ package com.xvixivx.dto;
 
 public class SharedChannelDto {
 
-    private GuildDTO guild = new GuildDTO();
+    private GuildDto guild = new GuildDto();
     private long channelId;
     private String channelName;
     private String gameType;
@@ -12,7 +12,7 @@ public class SharedChannelDto {
 
     public SharedChannelDto(){}
 
-    public SharedChannelDto(GuildDTO guild,
+    public SharedChannelDto(GuildDto guild,
                             long channelId,
                             String channelName,
                             boolean receive)
@@ -25,13 +25,13 @@ public class SharedChannelDto {
         this.receive = receive;
     }
 
-    public SharedChannelDto(GuildDTO guild,
-                             long channelId,
-                             String channelName,
-                             String gameType,
-                             String region,
-                             String platform,
-                             boolean receive)
+    public SharedChannelDto(GuildDto guild,
+                            long channelId,
+                            String channelName,
+                            String gameType,
+                            String region,
+                            String platform,
+                            boolean receive)
     {
         this.guild.setId(guild.getId());
         this.guild.setName(guild.getName());
@@ -44,7 +44,7 @@ public class SharedChannelDto {
         this.receive = receive;
     }
 
-    public GuildDTO getGuild() { return guild; }
+    public GuildDto getGuild() { return guild; }
 
     public long getChannelId() { return channelId; }
 
@@ -58,7 +58,7 @@ public class SharedChannelDto {
 
     public boolean isReceive() { return receive; }
 
-    public void setGuild(GuildDTO guild) { this.guild = guild; }
+    public void setGuild(GuildDto guild) { this.guild = guild; }
 
     public void setChannelId(long channelId) { this.channelId = channelId; }
 

@@ -1,6 +1,6 @@
 package com.xvixivx.dao;
 
-import com.xvixivx.dto.GuildDTO;
+import com.xvixivx.dto.GuildDto;
 import com.xvixivx.dto.SharedChannelDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class SharedChannelDao {
     private String userName = "";
     private String passWord = "";
 
-    final Logger logger = LoggerFactory.getLogger(GuildDAO.class);
+    final Logger logger = LoggerFactory.getLogger(GuildDao.class);
 
     private void initialize()
     {
@@ -82,7 +82,7 @@ public class SharedChannelDao {
 
             if (rs.next())
             {
-                GuildDTO guild = new GuildDTO();
+                GuildDto guild = new GuildDto();
                 guild.setId(guildId);
                 guild.setName(rs.getString("guilds.name"));
                 guild.setRegion(rs.getString("guilds.region"));
@@ -133,7 +133,7 @@ public class SharedChannelDao {
     {
         this.initialize();
         List<SharedChannelDto> sharedChannels = new ArrayList<>();
-        GuildDTO guild = new GuildDTO();
+        GuildDto guild = new GuildDto();
 
         // Send Query
         try
@@ -206,7 +206,7 @@ public class SharedChannelDao {
     {
         this.initialize();
         List<SharedChannelDto> sharedChannels = new ArrayList<>();
-        GuildDTO guild = new GuildDTO();
+        GuildDto guild = new GuildDto();
 
         // Send Query
         try

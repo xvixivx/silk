@@ -1,8 +1,8 @@
 package com.xvixivx.commands;
 
-import com.xvixivx.dao.GuildDAO;
+import com.xvixivx.dao.GuildDao;
 import com.xvixivx.dao.SharedChannelDao;
-import com.xvixivx.dto.GuildDTO;
+import com.xvixivx.dto.GuildDto;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -40,7 +40,7 @@ public class ShareChannels extends ListenerAdapter {
         if (contents[1].equalsIgnoreCase("share") && contents[2].equalsIgnoreCase("channel"))
         {
             EmbedBuilder builder = new EmbedBuilder();
-            GuildDAO guildDAO = new GuildDAO();
+            GuildDao guildDao = new GuildDao();
             SharedChannelDao sharedChannelDao = new SharedChannelDao();
 
             // Minimum Arguments set of an example is "-s share channel tournament"
@@ -231,7 +231,7 @@ public class ShareChannels extends ListenerAdapter {
             // -s share channel guilds
             if (contents[3].equalsIgnoreCase("guilds"))
             {
-                List<GuildDTO> guilds = guildDAO.findAll();
+                List<GuildDto> guilds = guildDao.findAll();
 
                 if (guilds.size() == 0)
                 {
@@ -244,7 +244,7 @@ public class ShareChannels extends ListenerAdapter {
 
                 builder.setTitle("Guilds");
                 builder.setColor(Color.CYAN);
-                for (GuildDTO target : guilds)
+                for (GuildDto target : guilds)
                 {
                     builder.appendDescription(target.getName() + " (" + target.getRegion() + ")\n");
                 }

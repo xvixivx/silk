@@ -2,7 +2,7 @@ package com.xvixivx.dto;
 
 import java.util.List;
 
-public class AgentDTO {
+public class AgentDto {
 
     private String displayName;
     private String role;
@@ -15,7 +15,7 @@ public class AgentDTO {
     private String image;
     private List<String> skins;
 
-    public AgentDTO(String displayName,
+    public AgentDto(String displayName,
                     String role,
                     String weapon,
                     String alternateAction,

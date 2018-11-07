@@ -5,7 +5,7 @@ import com.xvixivx.util.Content;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MatchDTO {
+public class MatchDto {
 
     private String region;
     private String platform;
@@ -14,7 +14,7 @@ public class MatchDTO {
     private String note;
     private boolean ready;
 
-    public MatchDTO()
+    public MatchDto()
     {
         this.note = "";
         this.ready = true;

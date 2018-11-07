@@ -1,7 +1,7 @@
 package com.xvixivx.commands;
 
-import com.xvixivx.dto.AgentDTO;
-import com.xvixivx.dao.AgentDAO;
+import com.xvixivx.dto.AgentDto;
+import com.xvixivx.dao.AgentDao;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -47,7 +47,7 @@ public class Agent extends ListenerAdapter {
                 return;
             }
 
-            AgentDAO agentDAO = new AgentDAO();
+            AgentDao agentDao = new AgentDao();
             String agentName;
 
             if (Content.isRightSize(contents[2], 10) && Content.isMatchTheRegex(contents[2]))
@@ -60,7 +60,7 @@ public class Agent extends ListenerAdapter {
                 return;
             }
 
-            List<AgentDTO> agents = agentDAO.findAgent(agentName);
+            List<AgentDto> agents = agentDao.findAgent(agentName);
 
             if (agents.size() == 0)
             {
@@ -71,7 +71,7 @@ public class Agent extends ListenerAdapter {
             {
                 builder.setTitle("**Agent Info**");
                 builder.setColor(Color.CYAN);
-                for (AgentDTO agent : agents)
+                for (AgentDto agent : agents)
                 {
                     builder.addField("NAME", agent.getDisplayName(), false);
                     builder.addField("ROLE", agent.getRole(), false);

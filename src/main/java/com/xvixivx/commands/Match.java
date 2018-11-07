@@ -1,11 +1,10 @@
 package com.xvixivx.commands;
 
-import com.xvixivx.dao.GuildDAO;
-import com.xvixivx.dao.MatchChannelDAO;
-import com.xvixivx.dto.GuildDTO;
-import com.xvixivx.dto.MatchChannelDTO;
-import com.xvixivx.dto.MatchDTO;
-import com.xvixivx.util.Content;
+import com.xvixivx.dao.GuildDao;
+import com.xvixivx.dao.MatchChannelDao;
+import com.xvixivx.dto.GuildDto;
+import com.xvixivx.dto.MatchChannelDto;
+import com.xvixivx.dto.MatchDto;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
@@ -41,9 +40,9 @@ public class Match extends ListenerAdapter {
         if (contents[1].equalsIgnoreCase("match"))
         {
             EmbedBuilder builder = new EmbedBuilder();
-            GuildDAO guildDAO = new GuildDAO();
-            MatchChannelDAO matchChannelDAO = new MatchChannelDAO();
-            List<MatchChannelDTO> matchChannels;
+            GuildDao guildDao = new GuildDao();
+            MatchChannelDao matchChannelDAO = new MatchChannelDao();
+            List<MatchChannelDto> matchChannels;
 
             // Minimum Arguments set of an example for the set is "-s match set"
             int minimumArgumentsNumberForSet = 3;
@@ -95,7 +94,7 @@ public class Match extends ListenerAdapter {
                 }
 
                 boolean receive = true;
-                MatchDTO match = new MatchDTO();
+                MatchDto match = new MatchDto();
                 if (contents.length > 3)
                 {
                     for (int i = 3; i < contents.length; i++)
@@ -146,7 +145,7 @@ public class Match extends ListenerAdapter {
             // -s match guilds
             if (contents[2].equalsIgnoreCase("guilds"))
             {
-                List<GuildDTO> guilds = guildDAO.findAll();
+                List<GuildDto> guilds = guildDao.findAll();
 
                 if (guilds.size() == 0)
                 {
@@ -159,7 +158,7 @@ public class Match extends ListenerAdapter {
 
                 builder.setTitle("Guilds");
                 builder.setColor(Color.CYAN);
-                for (GuildDTO target : guilds)
+                for (GuildDto target : guilds)
                 {
                     builder.appendDescription(target.getName() + " (" + target.getRegion() + ")\n");
                 }
@@ -192,7 +191,7 @@ public class Match extends ListenerAdapter {
                 return;
             }
 
-            MatchDTO match = new MatchDTO();
+            MatchDto match = new MatchDto();
             match.setRegion(contents[2]);
             match.setPlatform(contents[3]);
             match.setGameType(contents[4]);
@@ -220,7 +219,7 @@ public class Match extends ListenerAdapter {
 
             boolean matchChannelTableHasThisChannel = false;
 
-            for (MatchChannelDTO target : matchChannels)
+            for (MatchChannelDto target : matchChannels)
             {
                 Guild targetGuild = event.getJDA().getGuildById(target.getGuild().getId());
                 String guildName = target.getGuild().getName();
@@ -279,7 +278,7 @@ public class Match extends ListenerAdapter {
         }
     }
 
-    private void toggleReceiveStatus(MessageReceivedEvent event, EmbedBuilder builder, MatchChannelDAO matchChannelDAO, boolean receive)
+    private void toggleReceiveStatus(MessageReceivedEvent event, EmbedBuilder builder, MatchChannelDao matchChannelDAO, boolean receive)
     {
         Guild guild = event.getGuild();
         TextChannel channel = event.getTextChannel();
@@ -328,7 +327,7 @@ public class Match extends ListenerAdapter {
         builder.clear();
     }
 
-    private void matchInfo(MessageReceivedEvent event, TextChannel channel, EmbedBuilder builder, MatchDTO match)
+    private void matchInfo(MessageReceivedEvent event, TextChannel channel, EmbedBuilder builder, MatchDto match)
     {
         Guild guild = event.getGuild();
 

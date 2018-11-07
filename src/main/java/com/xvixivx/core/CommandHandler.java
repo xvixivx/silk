@@ -1,8 +1,8 @@
 package com.xvixivx.core;
 
 import com.xvixivx.commands.*;
-import com.xvixivx.dao.GuildDAO;
-import com.xvixivx.dao.MatchChannelDAO;
+import com.xvixivx.dao.GuildDao;
+import com.xvixivx.dao.MatchChannelDao;
 import com.xvixivx.dao.SharedChannelDao;
 import com.xvixivx.util.Content;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -61,7 +61,7 @@ public class CommandHandler extends ListenerAdapter {
         List<Guild> guilds = event.getJDA().getGuilds();
         for (Guild target : guilds)
         {
-            int result = new GuildDAO().upsertAll(target.getIdLong(), target.getName(), target.getRegionRaw());
+            int result = new GuildDao().upsertAll(target.getIdLong(), target.getName(), target.getRegionRaw());
             if (result == 0)
             {
                 logger.error("Upsert Error at onReady(ReadyEvent event)");
@@ -73,7 +73,7 @@ public class CommandHandler extends ListenerAdapter {
     public void onGuildJoin(GuildJoinEvent event)
     {
         Guild guild = event.getGuild();
-        int result = new GuildDAO().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
+        int result = new GuildDao().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
         if (result == 0)
         {
             logger.error("Upsert Error at onGuildJoin(GuildJoinEvent event)");
@@ -84,7 +84,7 @@ public class CommandHandler extends ListenerAdapter {
     public void onGuildLeave(GuildLeaveEvent event)
     {
         Guild guild = event.getGuild();
-        int result = new GuildDAO().delete(guild.getIdLong());
+        int result = new GuildDao().delete(guild.getIdLong());
         if (result == 0)
         {
             logger.error("Delete Error at onGuildLeave(GuildLeaveEvent event)");
@@ -95,7 +95,7 @@ public class CommandHandler extends ListenerAdapter {
     public void onGuildUpdateName(GuildUpdateNameEvent event)
     {
         Guild guild = event.getGuild();
-        int result = new GuildDAO().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
+        int result = new GuildDao().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
         if (result == 0)
         {
             logger.error("Upsert Error at onGuildUpdateName(GuildUpdateNameEvent event)");
@@ -106,7 +106,7 @@ public class CommandHandler extends ListenerAdapter {
     public void onGuildUpdateRegion(GuildUpdateRegionEvent event)
     {
         Guild guild = event.getGuild();
-        int result = new GuildDAO().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
+        int result = new GuildDao().upsertAll(guild.getIdLong(), guild.getName(), guild.getRegionRaw());
         if (result == 0)
         {
             logger.error("Upsert Error at onGuildUpdateName(GuildUpdateNameEvent event)");
@@ -117,7 +117,7 @@ public class CommandHandler extends ListenerAdapter {
     public void onTextChannelDelete(TextChannelDeleteEvent event)
     {
         Guild guild = event.getGuild();
-        int result = new MatchChannelDAO().delete(guild.getIdLong(), event.getChannel().getIdLong());
+        int result = new MatchChannelDao().delete(guild.getIdLong(), event.getChannel().getIdLong());
         if (result == 0)
         {
             logger.error("Delete Error at onTextChannelDelete(TextChannelDeleteEvent event)");
@@ -136,7 +136,7 @@ public class CommandHandler extends ListenerAdapter {
     {
         Guild guild = event.getGuild();
         TextChannel channel = event.getChannel();
-        int result = new MatchChannelDAO().updateChannelName(guild.getIdLong(), channel.getIdLong(), channel.getName());
+        int result = new MatchChannelDao().updateChannelName(guild.getIdLong(), channel.getIdLong(), channel.getName());
         if (result == 0)
         {
             logger.error("Update Error at onTextChannelUpdateName(TextChannelUpdateNameEvent event)");

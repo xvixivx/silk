@@ -1,6 +1,6 @@
 package com.xvixivx.dao;
 
-import com.xvixivx.dto.AgentDTO;
+import com.xvixivx.dto.AgentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,19 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class AgentDAO {
+public class AgentDao {
 
     private String url = "";
     private String userName = "";
     private String passWord = "";
 
-    public List<AgentDTO> findAgent(String agentName)
+    public List<AgentDto> findAgent(String agentName)
     {
-        final Logger logger = LoggerFactory.getLogger(AgentDAO.class);
+        final Logger logger = LoggerFactory.getLogger(AgentDao.class);
 
         Connection connection = null;
         PreparedStatement pstmt = null;
-        List<AgentDTO> agents = new ArrayList<>();
+        List<AgentDto> agents = new ArrayList<>();
 
         // Load Driver
         try
@@ -82,7 +82,7 @@ public class AgentDAO {
                 int health = rs.getInt("health");
                 String image = rs.getString("image");
 
-                AgentDTO agent = new AgentDTO(displayName, role, weapon, alternateAction, ability, ultimateAbility, damage, health, image);
+                AgentDto agent = new AgentDto(displayName, role, weapon, alternateAction, ability, ultimateAbility, damage, health, image);
                 agents.add(agent);
             }
         }

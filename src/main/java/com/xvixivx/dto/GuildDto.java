@@ -1,6 +1,6 @@
 package com.xvixivx.dto;
 
-public class GuildDTO {
+public class GuildDto {
 
     private long id;
     private String name;
@@ -8,11 +8,11 @@ public class GuildDTO {
 //    private String matchChannelId;
 //    private boolean receiveMatch;
 
-    public GuildDTO()
+    public GuildDto()
     {
     }
 
-    public GuildDTO(long id,
+    public GuildDto(long id,
                     String name,
                     String region)
     {
