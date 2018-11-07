@@ -197,7 +197,6 @@ public class CommandHandler extends ListenerAdapter {
         {
             result = true;
         }
-        logger.debug("Prefix is " + prefix);
 
         return result;
     }
