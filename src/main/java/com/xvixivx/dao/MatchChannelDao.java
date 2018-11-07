@@ -14,14 +14,14 @@ import java.util.Properties;
 
 public class MatchChannelDao {
 
+    private final Logger logger = LoggerFactory.getLogger(GuildDao.class);
+
     private Connection connection = null;
     private PreparedStatement pstmt = null;
 
     private String url = "";
     private String userName = "";
     private String passWord = "";
-
-    final Logger logger = LoggerFactory.getLogger(GuildDao.class);
 
     private void initialize()
     {

@@ -13,14 +13,14 @@ import java.util.Properties;
 
 public class AgentDao {
 
+    private final Logger logger = LoggerFactory.getLogger(AgentDao.class);
+
     private String url = "";
     private String userName = "";
     private String passWord = "";
 
     public List<AgentDto> findAgent(String agentName)
     {
-        final Logger logger = LoggerFactory.getLogger(AgentDao.class);
-
         Connection connection = null;
         PreparedStatement pstmt = null;
         List<AgentDto> agents = new ArrayList<>();

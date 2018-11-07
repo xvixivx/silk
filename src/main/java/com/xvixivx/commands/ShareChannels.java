@@ -19,7 +19,7 @@ public class ShareChannels extends ListenerAdapter {
 
     enum GameType {DEFAULT, PVP, TOURNAMENT}
 
-    final Logger logger = LoggerFactory.getLogger(ShareChannels.class);
+    private final Logger logger = LoggerFactory.getLogger(ShareChannels.class);
 
     public void run(MessageReceivedEvent event) {
 
