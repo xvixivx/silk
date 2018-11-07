@@ -32,6 +32,7 @@ public class Silk {
             builder.addEventListener(new Match());
             builder.addEventListener(new Help());
             builder.addEventListener(new ShareChannels());
+            builder.addEventListener(new Prefix());
             // This Class should be the last
             builder.addEventListener(new ShareMessages());
             // Set Game

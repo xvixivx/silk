@@ -29,13 +29,13 @@ public class Help extends ListenerAdapter {
         {
             return;
         }
+        Guild guild = event.getGuild();
         // Check prefix
-        if (!(Content.isRightPrefix(contents[0]) || botName.equalsIgnoreCase(contents[0])))
+        if (!(Content.isRightPrefix(guild.getId(), contents[0]) || botName.equalsIgnoreCase(contents[0])))
         {
             return;
         }
 
-        Guild guild = event.getGuild();
         TextChannel channel = event.getTextChannel();
 
         if (!Content.hasCommand(contents))

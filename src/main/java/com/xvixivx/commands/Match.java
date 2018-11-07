@@ -37,13 +37,13 @@ public class Match extends ListenerAdapter {
         {
             return;
         }
+        Guild guild = event.getGuild();
         // Check prefix
-        if (!Content.isRightPrefix(contents[0]))
+        if (!Content.isRightPrefix(guild.getId(), contents[0]))
         {
             return;
         }
 
-        Guild guild = event.getGuild();
         TextChannel channel = event.getTextChannel();
 
         if (!Content.hasCommand(contents))
@@ -345,7 +345,6 @@ public class Match extends ListenerAdapter {
             channel.sendMessage(builder.build()).queue();
         }
         builder.clear();
-        return;
     }
 
     private void matchInfo(MessageReceivedEvent event, TextChannel channel, EmbedBuilder builder, MatchDTO match)
@@ -384,6 +383,5 @@ public class Match extends ListenerAdapter {
         builder.addField("game-type", "group or tournament (g or t)", false);
         channel.sendMessage(builder.build()).queue();
         builder.clear();
-        return;
     }
 }

@@ -3,19 +3,28 @@ package com.xvixivx.util;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 public class Content {
 
     final static Logger logger = LoggerFactory.getLogger(Content.class);
 
-    public static boolean isRightPrefix(String content)
+    public static boolean isRightPrefix(String guildId, String content)
     {
         boolean result = false;
         // Check prefix
-        if (content.equalsIgnoreCase("-s"))
+        Jedis jedis = new Jedis("localhost", 6379);
+        String prefix = jedis.get(guildId);
+
+        if (prefix == null)
+        {
+            prefix = "-s";
+        }
+        if (content.equalsIgnoreCase(prefix))
         {
             result = true;
         }
+        logger.debug("Prefix is " + prefix);
         return result;
     }
 
