@@ -24,17 +24,7 @@ public class Silk {
             // Set Bot Token
             builder.setToken(token);
             // Add Event Listener
-            builder.addEventListener(new Initialize());
-            builder.addEventListener(new GuildInfo());
-            builder.addEventListener(new AppInfo());
-            builder.addEventListener(new Invite());
-            builder.addEventListener(new Agent());
-            builder.addEventListener(new Match());
-            builder.addEventListener(new Help());
-            builder.addEventListener(new ShareChannels());
-            builder.addEventListener(new Prefix());
-            // This Class should be the last
-            builder.addEventListener(new ShareMessages());
+            builder.addEventListener(new CommandHandler());
             // Set Game
             builder.setGame(Game.of(Game.GameType.DEFAULT,"-s help"));
             // Build

@@ -18,21 +18,10 @@ public class ShareMessages extends ListenerAdapter {
 
     final Logger logger = LoggerFactory.getLogger(Match.class);
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event)
+    public void run(MessageReceivedEvent event)
     {
-        if (event.getAuthor().isBot()) return;
-        // We don't want to respond to other bot accounts, including ourself
         Message message = event.getMessage();
         String contents = message.getContentRaw();
-        // getContentRaw() is an atomic getter
-        // getContentDisplay() is a lazy getter which modifies the content for e.g. console view (strip discord formatting)
-
-        // Check Channel Type
-        if (!event.isFromType(ChannelType.TEXT))
-        {
-            return;
-        }
 
         if (contents.startsWith("-s share channel") || contents.startsWith("-s match"))
         {
