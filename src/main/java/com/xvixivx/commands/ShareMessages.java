@@ -18,12 +18,12 @@ public class ShareMessages extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(Match.class);
 
-    public void run(MessageReceivedEvent event)
+    public void run(MessageReceivedEvent event, String prefix)
     {
         Message message = event.getMessage();
         String contents = message.getContentRaw();
 
-        if (contents.startsWith("-s share channel") || contents.startsWith("-s match"))
+        if (contents.startsWith(prefix + " share channel") || contents.startsWith(prefix + " match"))
         {
             return;
         }

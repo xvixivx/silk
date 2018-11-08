@@ -21,7 +21,7 @@ public class Match extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(Match.class);
 
-    public void run(MessageReceivedEvent event)
+    public void run(MessageReceivedEvent event, String prefix)
     {
         Message message = event.getMessage();
         String[] contents = message.getContentRaw().split(" ", 7);
@@ -49,7 +49,7 @@ public class Match extends ListenerAdapter {
 
             if (contents.length < minimumArgumentsNumberForSet)
             {
-                commandInfo(channel, builder);
+                commandInfo(channel, builder, prefix);
                 return;
             }
 
@@ -81,13 +81,13 @@ public class Match extends ListenerAdapter {
                     builder.setTitle("**Command Info**");
                     builder.setColor(Color.RED);
                     builder.setDescription("Filters");
-                    builder.addField("Set All Attribute", "`-s match set (region :optional) (platform :optional) (game-type :optional)`\n"
-                            + "**Example**: `-s match set eu mobile tournament`", false);
-                    builder.addField("Set Region And Platform", "`-s match set (region) (platform)`\n"
-                            + "**Example**: `-s match set as pc`", false);
-                    builder.addField("Set Platform And Game Type", "`-s match set (platform) (game-type)`\n"
-                            + "**Example**: `-s match set na group`", false);
-                    builder.addField("No Filter", "`-s match set`", false);
+                    builder.addField("Set All Attribute", "`" + prefix + " match set (region :optional) (platform :optional) (game-type :optional)`\n"
+                            + "**Example**: `" + prefix + " match set eu mobile tournament`", false);
+                    builder.addField("Set Region And Platform", "`" + prefix + " match set (region) (platform)`\n"
+                            + "**Example**: `" + prefix + " match set as pc`", false);
+                    builder.addField("Set Platform And Game Type", "`" + prefix + " match set (platform) (game-type)`\n"
+                            + "**Example**: `" + prefix + " match set na group`", false);
+                    builder.addField("No Filter", "`" + prefix + " match set`", false);
                     channel.sendMessage(builder.build()).queue();
                     builder.clear();
                     return;
@@ -130,7 +130,7 @@ public class Match extends ListenerAdapter {
             if (contents[2].equalsIgnoreCase("on"))
             {
                 boolean receive = true;
-                toggleReceiveStatus(event, builder, matchChannelDAO, receive);
+                toggleReceiveStatus(event, builder, prefix, matchChannelDAO, receive);
                 return;
             }
 
@@ -138,7 +138,7 @@ public class Match extends ListenerAdapter {
             if (contents[2].equalsIgnoreCase("off"))
             {
                 boolean receive = false;
-                toggleReceiveStatus(event, builder, matchChannelDAO, receive);
+                toggleReceiveStatus(event, builder, prefix, matchChannelDAO, receive);
                 return;
             }
 
@@ -175,7 +175,7 @@ public class Match extends ListenerAdapter {
                 builder.setTitle("**Error**");
                 builder.setColor(Color.RED);
                 builder.setDescription("Please enter the command below on the channel that will accept the match info");
-                builder.addField("Command", "-s match set", false);
+                builder.addField("Command", prefix + " match set", false);
                 channel.sendMessage(builder.build()).queue();
                 builder.clear();
                 return;
@@ -187,7 +187,7 @@ public class Match extends ListenerAdapter {
 
             if (contents.length < minimumArgumentsNumber || contents.length > maximumArgumentsNumber)
             {
-                commandInfo(channel, builder);
+                commandInfo(channel, builder, prefix);
                 return;
             }
 
@@ -204,7 +204,7 @@ public class Match extends ListenerAdapter {
 
             if (!match.isReady())
             {
-                commandInfo(channel, builder);
+                commandInfo(channel, builder, prefix);
                 return;
             }
 
@@ -278,7 +278,7 @@ public class Match extends ListenerAdapter {
         }
     }
 
-    private void toggleReceiveStatus(MessageReceivedEvent event, EmbedBuilder builder, MatchChannelDao matchChannelDAO, boolean receive)
+    private void toggleReceiveStatus(MessageReceivedEvent event, EmbedBuilder builder, String prefix, MatchChannelDao matchChannelDAO, boolean receive)
     {
         Guild guild = event.getGuild();
         TextChannel channel = event.getTextChannel();
@@ -319,7 +319,7 @@ public class Match extends ListenerAdapter {
             description = "This channel has not been set yet\n";
             if (receive)
             {
-                description += "Please type `-s match set (region) (platform) (game-type)`";
+                description += "Please type `" + prefix + " match set (region) (platform) (game-type)`";
             }
             builder.setDescription(description);
             channel.sendMessage(builder.build()).queue();
@@ -352,12 +352,12 @@ public class Match extends ListenerAdapter {
         builder.clear();
     }
 
-    private void commandInfo(TextChannel channel, EmbedBuilder builder)
+    private void commandInfo(TextChannel channel, EmbedBuilder builder, String prefix)
     {
         builder.setTitle("**Command Information**");
         builder.setColor(Color.RED);
-        builder.addField("usage", "-s match (region) (platform) (game-type) (room-id) (note: optional)", false);
-        builder.addField("example", "-s match eu mobile tournament 8E3RCCCE\n" + "-s match eu m t 8E3RCCCE", false);
+        builder.addField("usage", prefix + " match (region) (platform) (game-type) (room-id) (note: optional)", false);
+        builder.addField("example", prefix + " match eu mobile tournament 8E3RCCCE\n" + prefix + " match eu m t 8E3RCCCE", false);
         builder.addField("region", "as = asia, eu = european union, na = north america, sa = south america", false);
         builder.addField("platform", "pc or mobile (p or m)", false);
         builder.addField("game-type", "group or tournament (g or t)", false);

@@ -22,13 +22,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 public class CommandHandler extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(CommandHandler.class);
 
     private Jedis jedis;
+
+    private String defaultPrefix;
 
     // Commands
     private Invite invite;
@@ -44,6 +49,14 @@ public class CommandHandler extends ListenerAdapter {
     CommandHandler()
     {
         this.jedis = new Jedis("localhost", 6379);
+        Properties properties = new Properties();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
+        try {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.defaultPrefix = properties.getProperty("prefix");
         this.invite = new Invite();
         this.appInfo = new AppInfo();
         this.guildInfo = new GuildInfo();
@@ -169,31 +182,32 @@ public class CommandHandler extends ListenerAdapter {
 
         String guildId = event.getGuild().getId();
 
-        if (prefixCheck(guildId, contents[0]) && Content.hasCommand(contents))
+        String prefixStr = jedis.get(guildId);
+
+        if (prefixStr == null)
         {
-            agent.run(event);
+            prefixStr = defaultPrefix;
+        }
+
+        if (prefixCheck(contents[0], prefixStr) && Content.hasCommand(contents))
+        {
+            agent.run(event, prefixStr);
             appInfo.run(event);
             guildInfo.run(event);
             prefix.run(event);
-            help.run(event);
+            help.run(event, prefixStr);
             invite.run(event);
-            match.run(event);
-            shareChannels.run(event);
+            match.run(event, prefixStr);
+            shareChannels.run(event, prefixStr);
         }
 
-        shareMessages.run(event);
+        shareMessages.run(event, prefixStr);
     }
 
-    private boolean prefixCheck(String guildId, String content)
+    private boolean prefixCheck(String content, String prefix)
     {
         boolean result = false;
 
-        String prefix = jedis.get(guildId);
-
-        if (prefix == null)
-        {
-            prefix = "-s";
-        }
         if (content.equalsIgnoreCase(prefix))
         {
             result = true;

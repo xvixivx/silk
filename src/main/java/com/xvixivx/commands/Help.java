@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class Help extends ListenerAdapter {
 
-    public void run(MessageReceivedEvent event)
+    public void run(MessageReceivedEvent event, String prefix)
     {
         Message message = event.getMessage();
         String[] contents = message.getContentRaw().split(" ");
@@ -23,11 +23,6 @@ public class Help extends ListenerAdapter {
         // Check Channel Type
 
         Guild guild = event.getGuild();
-        // Check prefix
-        if (!(Content.isRightPrefix(guild.getId(), contents[0]) || botName.equalsIgnoreCase(contents[0])))
-        {
-            return;
-        }
 
         TextChannel channel = event.getTextChannel();
 
@@ -42,16 +37,16 @@ public class Help extends ListenerAdapter {
             EmbedBuilder builder = new EmbedBuilder();
             builder.setTitle("**Command List**");
             builder.setColor(Color.CYAN);
-            builder.setDescription("This server's prefix is `-s`");
-            builder.addField("-s invite", "make the invitation link", false);
-            builder.addField("-s agent", "mcvs agent info", false);
-            builder.addField("-s bot", "bot info ", false);
-            builder.addField("-s guild", "guild info ", false);
-            builder.addField("-s share channel pvp", "share pvp code channel", false);
-            builder.addField("-s share channel tournament", "share tournament code channel", false);
-            builder.addField("-s match", "send match info to the other guilds", false);
-            builder.addField("-s match set help", "help of a matchmaking channel settings", false);
-            builder.addField("-s match guilds", "guild list", false);
+            builder.setDescription("This server's prefix is `" + prefix + "`");
+            builder.addField(prefix + " invite", "make the invitation link", false);
+            builder.addField(prefix + " agent", "mcvs agent info", false);
+            builder.addField(prefix + " bot", "bot info ", false);
+            builder.addField(prefix + " guild", "guild info ", false);
+            builder.addField(prefix + " share channel pvp", "share pvp code channel", false);
+            builder.addField(prefix + " share channel tournament", "share tournament code channel", false);
+            builder.addField(prefix + " match", "send match info to the other guilds", false);
+            builder.addField(prefix + " match set help", "help of a matchmaking channel settings", false);
+            builder.addField(prefix + " match guilds", "guild list", false);
             channel.sendMessage(builder.build()).queue();
         }
     }

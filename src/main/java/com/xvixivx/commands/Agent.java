@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Agent extends ListenerAdapter {
 
-    public void run(MessageReceivedEvent event)
+    public void run(MessageReceivedEvent event, String prefix)
     {
         Message message = event.getMessage();
         String[] contents = message.getContentRaw().split(" ");
@@ -43,7 +43,7 @@ public class Agent extends ListenerAdapter {
 
             if (contents.length != 3)
             {
-                commandInfo(channel, builder);
+                commandInfo(channel, builder, prefix);
                 return;
             }
 
@@ -56,7 +56,7 @@ public class Agent extends ListenerAdapter {
             }
             else
             {
-                commandInfo(channel, builder);
+                commandInfo(channel, builder, prefix);
                 return;
             }
 
@@ -89,12 +89,12 @@ public class Agent extends ListenerAdapter {
         }
     }
 
-    private void commandInfo(TextChannel channel, EmbedBuilder builder)
+    private void commandInfo(TextChannel channel, EmbedBuilder builder, String prefix)
     {
         builder.setTitle("**Command Information**");
         builder.setColor(Color.RED);
-        builder.addField("usage", "-s agent (agent-name)", false);
-        builder.addField("example", "-s agent ghost", false);
+        builder.addField("usage", prefix + " agent (agent-name)", false);
+        builder.addField("example", prefix + " agent ghost", false);
         channel.sendMessage(builder.build()).queue();
         builder.clear();
     }

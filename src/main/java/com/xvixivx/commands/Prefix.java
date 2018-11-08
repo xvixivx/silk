@@ -30,11 +30,12 @@ public class Prefix extends ListenerAdapter {
         }
 
         Jedis jedis = new Jedis("localhost", 6379);
+
         String prefix;
+        prefix = jedis.get(guild.getId());
 
         if (contents.length == 2)
         {
-            prefix = jedis.get(guild.getId());
             if (prefix == null)
             {
                 builder.setTitle("Error");
@@ -68,7 +69,7 @@ public class Prefix extends ListenerAdapter {
             {
                 builder.setTitle("Error");
                 builder.setColor(Color.RED);
-                builder.setDescription("Usage: -s prefix set (prefix)");
+                builder.setDescription("Usage: " + prefix + " prefix set (prefix)");
                 channel.sendMessage(builder.build()).queue();
                 builder.clear();
                 return;
