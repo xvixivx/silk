@@ -32,15 +32,6 @@ public class Invite extends ListenerAdapter {
         if (contents[1].equalsIgnoreCase("invite")) {
             EmbedBuilder builder = new EmbedBuilder();
 
-            if (contents.length != 2) {
-                builder.setTitle("**Error**");
-                builder.setColor(Color.RED);
-                builder.addField("usage", "-s invite", false);
-                channel.sendMessage(builder.build()).queue();
-                builder.clear();
-                return;
-            }
-
             builder.setTitle("Get SILK on your server!");
             builder.setColor(Color.CYAN);
             builder.setDescription("[Click to invite SILK to your server]"
