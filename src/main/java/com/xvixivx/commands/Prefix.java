@@ -29,6 +29,7 @@ public class Prefix extends ListenerAdapter {
             return;
         }
 
+        // TODO: host name is "redis" for production environment. Get URL from properties.
         Jedis jedis = new Jedis("localhost", 6379);
 
         String prefix;

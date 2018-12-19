@@ -48,6 +48,7 @@ public class CommandHandler extends ListenerAdapter {
 
     CommandHandler()
     {
+        // TODO: host name is "redis" for production environment. Get URL from properties.
         this.jedis = new Jedis("localhost", 6379);
         Properties properties = new Properties();
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
